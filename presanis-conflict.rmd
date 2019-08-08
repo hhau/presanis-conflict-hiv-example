@@ -1,0 +1,79 @@
+---
+title: ""
+author: "Andrew Manderson"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+fontfamily: tgpagella
+fontsize: 10pt
+papersize: a4
+geometry: margin=2.25cm
+bibliography: ../0bibliography/year-1-bib.bib
+csl: aam71-test.csl
+output: 
+  pdf_document:
+    includes:
+      in_header:
+        tex-input/pre.tex
+    fig_caption: true
+    number_sections: true
+    keep_tex: true
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align = "center", auto_pdf = TRUE)
+```
+
+# HIV Conflict model
+
+## trying to demonstrate `wsre`
+
+### Splitting on the basic parameters
+
+- Splitting on the base parameters $a, b, c, d, g, w$ is not going to yield conflict, as the prior on them is known, and Jeffereys.
+- However, $\pd_{1}(\phi \mid Y_{1}), \pd_{2}(\phi \mid Y_{2})$ should conflict with each other (that's what the paper is about).
+- Probably implies $\pd_{1}(\phi \mid Y_{1}), \pd_{2}(\phi \mid Y_{2})$ conflict with $\pd_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$.
+
+### splitting on the probabilities
+
+- Much the same reasoning applies for $p_{1}, p_{2}, p_{3}, p_{4}, p_{10}, p_{11}$, as they are the same as the basic parameters
+- Hence, we should look to the more complicated nodes
+- We do not analytically know the priors on these, and I'm not sure if the complicated relationships give them any kind of weird shape.
+- If we split on $p_{9}$ say, we can choose the prior on it under one of the models.
+
+
+- Looking at the prior samples - we might have some luck with $p_{12}$?
+- It's still a bit diffuse to get the kind of underestimation we had in the normal case, though that might be due to boundaries.
+- Again, must split in the nose-to-tail kind of way.
+- If we switch to beta(2,2), what happens?
+    - More concentrated - better for conflict
+- One small hitch is that in order to get the kind of conflict we've previously looked at, we need to sample the broader model first (which means sampling the smaller bit, and then somehow going back through the transformation defined in the paper).
+    - This is possible, but tricky. might be worth it.
+    - if we split on $p_{12}$, then the induced prior under model one (the one from the big model) is heavily biased towards 1.
+    - with a flat prior on it (or even the same beta(k, k) prior?) the smaller model, that just has the 12th study in it is centred around .16.
+    - This is going to make us think about some complicated dirichlet decomposition of the remaining probability.
+    - link function is very non-invertable, 1 -> 5. Model perf will be heavily dependent on how we broadcast out the sampled value of $p_{12}$ from the earlier model to each of the base components.
+    - $p_{6}$ might also be reasonable to split on, and easier given multiplicative nature of link function.
+
+
+## full model prior/posterior comparison
+
+```{r prior_prost, fig.cap = "prior posterior comparison for the full model. Suggest splitting on something like $p_{12}$, where there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Maybe $p_{6}$ as well, but that looks like a kernel-boundary nightmare."}
+knitr::include_graphics("plots/hiv-example/prior-post-compare.pdf")
+```
+
+
+<!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
+\newpage
+
+<!-- The {-} tag here suppresses the section numbering. -->
+# Bibliography {-}
+
+<!-- This makes pandoc-citeproc put the references before the end of document. -->
+<div id="refs"></div>
+
+\newpage
+
+<!-- Now switch to alphabetical numbering for the appendix, and reset the counter. -->
+\renewcommand{\thesection}{\Alph{section}}
+\setcounter{section}{0}
+
+# Appendix 

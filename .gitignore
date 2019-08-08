@@ -1,0 +1,19 @@
+# complied objects
+*.so
+*.o
+*.dll
+#*.hpp
+#*.cpp
+
+# R outputs that one does not normally want to VC
+*.rds
+*.pdf
+*.png
+
+# the package directory - sometimes useful sometimes not
+#package/
+
+# I don't really like commiting the top level .tex file.
+# the limit regex support of .gitignore means I have to specify this file 
+# manually
+presanis-conflict.tex
