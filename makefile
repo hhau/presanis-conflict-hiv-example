@@ -43,5 +43,8 @@ $(RDS_HIV)/full-model-fit.rds : $(SCRIPTS_HIV)/02-full-model.R $(DATA_HIV) $(STA
 $(RDS_HIV)/prior-samples.rds : $(SCRIPTS_HIV)/03-sample-prior.R $(DATA_HIV) $(STAN_FILES)/hiv-ev-sythn-prior.stan $(PARS_HIV)
 	$(RSCRIPT) $<
 
-$(PLOTS_HIV)/prior-post-compare.pdf : $(SCRIPTS_HIV)/04-output-plots.R $(PLOT_SETTINGS) $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/full-model-fit.rds $(PARS_HIV)
+$(RDS_HIV)/big-submodel-samples.rds : $(SCRIPTS_HIV)/06-sample-big-submodel.R $(DATA_HIV) $(STAN_FILES)/hiv-ev-sythn-big-submodel.stan $(PARS_HIV)
+	$(RSCRIPT) $<
+
+$(PLOTS_HIV)/prior-post-compare.pdf : $(SCRIPTS_HIV)/04-output-plots.R $(PLOT_SETTINGS) $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/full-model-fit.rds $(PARS_HIV) $(RDS_HIV)/big-submodel-samples.rds
 	$(RSCRIPT) $<

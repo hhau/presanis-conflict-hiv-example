@@ -48,17 +48,33 @@ knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align =
 - One small hitch is that in order to get the kind of conflict we've previously looked at, we need to sample the broader model first (which means sampling the smaller bit, and then somehow going back through the transformation defined in the paper).
     - This is possible, but tricky. might be worth it.
     - if we split on $p_{12}$, then the induced prior under model one (the one from the big model) is heavily biased towards 1.
+    - Hard to get out into the tails in probability cases because it is constrained to be in $[0, 1]$. (hard to get the kind of numerical error that `wsre` fixes).
     - with a flat prior on it (or even the same beta(k, k) prior?) the smaller model, that just has the 12th study in it is centred around .16.
     - This is going to make us think about some complicated dirichlet decomposition of the remaining probability.
     - link function is very non-invertable, 1 -> 5. Model perf will be heavily dependent on how we broadcast out the sampled value of $p_{12}$ from the earlier model to each of the base components.
     - $p_{6}$ might also be reasonable to split on, and easier given multiplicative nature of link function.
-
 
 ## full model prior/posterior comparison
 
 ```{r prior_prost, fig.cap = "prior posterior comparison for the full model. Suggest splitting on something like $p_{12}$, where there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Maybe $p_{6}$ as well, but that looks like a kernel-boundary nightmare."}
 knitr::include_graphics("plots/hiv-example/prior-post-compare.pdf")
 ```
+
+
+## Link function specification
+
+Define $\phi = \{p_{12}\}$.
+The first submodel is then 
+\input{tex-input/submodels/0010-study-12-submodel.tex}
+where we are free to choose $\pd_{1}(\phi)$.
+The second submodel is everything else.
+
+To get the kind of conflict we need we must sample $\pd_{1}(\phi \mid Y_{1})$ first.
+These samples must then be split into the $\theta = \{a, b, d, e, w\}$ values we need.
+The rest of the basic parameters can be proposed as usual.
+
+A slightly cheating link function would be to sample the joint distribution, see what values of $\theta$ are to be expected under the melded model, and build a link function that maps to that.
+This feels like cheating because I'm using samples from the joint (if possible - why bother melding?), but we know that the $p_{1}$ submodel is much more informative? (this requires checking)
 
 
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
