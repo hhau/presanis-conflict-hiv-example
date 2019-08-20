@@ -1,0 +1,10 @@
+- add p12 to parameter array, somehow
+- Much longer run (+ thin ? ), RW less efficient for sure
+  - 20k should be fine 
+  - thin back to the sample number of samples as the other stages?
+  - Ideally I would thin back to the effective sample size
+- read samples into plot maker
+- compare various stage one samples
+
+- checkpoints.
+- compute the energy usage for this sim?

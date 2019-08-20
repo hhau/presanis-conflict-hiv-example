@@ -1,7 +1,27 @@
+functions {
+  real log_kde(real x, vector x_samples, real bandwidth) {
+    int n_samples = num_elements(x_samples);
+    vector [n_samples] temp_log_vector;
+    real res;
+
+    for (ii in 1 : n_samples) {
+      temp_log_vector[ii] = normal_lpdf((x - x_samples[ii]) / bandwidth | 0.0, 1.0);
+    } 
+
+    res = log_sum_exp(temp_log_vector);
+    return(res);
+  }
+}
+
 data {
   int n_studies;
   int y_obs [n_studies];
   int n_obs [n_studies];
+
+  // KDE parameters
+  int n_prior_samples;
+  vector [n_prior_samples] phi_prior_samples;
+  real <lower = 0> bandwidth;
 }
 
 parameters {
@@ -63,4 +83,7 @@ model {
 
   // likelihood - drops the 12th study
   y_obs[1 : (n_studies - 1)] ~ binomial(n_obs[1 : (n_studies - 1)], p[1 : (n_studies - 1)]);
+
+  // marginalise out the prior on phi
+  target += -1 * log_kde(p[12], phi_prior_samples, bandwidth);
 }

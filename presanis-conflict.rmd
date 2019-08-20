@@ -54,7 +54,15 @@ knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align =
     - link function is very non-invertable, 1 -> 5. Model perf will be heavily dependent on how we broadcast out the sampled value of $p_{12}$ from the earlier model to each of the base components.
     - $p_{6}$ might also be reasonable to split on, and easier given multiplicative nature of link function.
 
+## Notation
+
+Define the full data as the information from all 12 studies $Y = \{\{y_{1}, n_{1}\}, \ldots, \{y_{12}, n_{12}\}\}$.
+We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{12}\}$ and $Y_{2} = \{\{y_{1}, n_{1}\}, \ldots, \{y_{11}, n_{11}\}\}$.
+
+
 ## full model prior/posterior comparison
+
+See Figure&nbsp;\ref{fig:prior_prost}.
 
 ```{r prior_prost, fig.cap = "prior posterior comparison for the full model. Suggest splitting on something like $p_{12}$, where there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Maybe $p_{6}$ as well, but that looks like a kernel-boundary nightmare."}
 knitr::include_graphics("plots/hiv-example/prior-post-compare.pdf")
