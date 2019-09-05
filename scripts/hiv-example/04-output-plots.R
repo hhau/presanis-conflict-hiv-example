@@ -97,11 +97,12 @@ full_data$parameter <- full_data$parameter %>%
 prepend_values <- sapply(
   X = c("aa", "bb", "cc", "dd", "ee", "ff", "gg", "hh", "ww"),
   function(x) {
-    paste("base_", x, sep = "")
+    str <- substr(x, 1, 1)
+    res <- paste0('italic(', str, ')')
   }
 ) 
 full_data$parameter <- full_data$parameter %>% 
-  recode(!!!prepend_values)
+  recode(!!!prepend_values) 
 
 p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype), col = dtype)) +
   geom_boxplot(
@@ -128,8 +129,8 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
       cc_prior = expression("p"(phi)),
       bb_subpost = expression("p"[2](phi~"|"~"Y"[2])),
       ba_subpost = expression("p"[1](phi~"|"~"Y"[1])),
-      ab_wsre_stage_one_target = expression(hat("p")[2](phi~"|"~"Y"[2])~"/"~"p"[2](phi)),
-      ab_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~"p"[2](phi)),
+      ab_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
+      ab_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
       aa_post = expression("p"(phi~"|"~"Y"))
     ),
     guide = guide_legend(reverse = TRUE)
@@ -137,10 +138,13 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
   labs(col = "QoI") +
   xlab("Parameter") +
   ylab("Probability") +
+  scale_x_discrete(
+    labels = function(x) parse(text = x)
+  ) +
   coord_flip() +
   NULL
 
-ggsave_fullpage(
+ ggsave_fullpage(
   filename = "plots/hiv-example/prior-post-compare.pdf",
   plot = p1
 )

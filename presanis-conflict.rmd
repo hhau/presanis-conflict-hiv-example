@@ -1,5 +1,5 @@
 ---
-title: ""
+title: "Anne's HIV example"
 author: "Andrew Manderson"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 fontfamily: tgpagella
@@ -23,6 +23,32 @@ knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align =
 ```
 
 # HIV Conflict model
+
+The HIV example of @ades:cliffe:02 and @presanis:etal:13 considers an evidence synthesis model for inferring the efficacy of screening HIV in prenatal clinics.
+The evidence synthesis model has 8 _basic parameters_ $a, b, \ldots, h$ , which are the probabilities of the women in the prenatal clinics belonging to certain risk groups. 
+The first risk group considers women born in sub-Saharan Africa (SSA), women injecting drug users (IDU), and the remaining women, which have corresponding probabilities $a, b$, and  $1 - a - b$.
+Conditional on this response, the populations are then partitioned based on whether they are HIV infected, which have probabilities $c, d$ and $e$ respectively, and if they have already been diagnosed prior to visiting the clinic, with probabilities $f, g$ and $h$.
+@presanis:etal:13 define _direct evidence_ as a study that pertains directly to one of these basis parameters, with _indirect evidence_ as a study that relates to a basic parameter through a deterministic link function.
+An additional probability is also included in the model, denoted $w$, but it is not of primary interest, as it merely permits the inclusion of additional studies which further inform the basic parameters.
+
+Our particular interest is in study 12, which informs the probability $p_{12}$, and provides indirect evidence for the basic parameters through the deterministic link function
+\input{tex-input/hiv-intro/0010-study-link-function.tex}
+We consider melding on the node corresponding to $p_{12}$. 
+To do so, we first consider the rest of the model, not including the study data $Y_{12}$ but still including $p_{12}$, and call this the large submodel, or submodel 1.
+The second submodel, consisting of the study data $Y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel 2. 
+@presanis:etal:13 investigated the effect or performing a _node split_ on this parameter to diagnose conflict between studies, hence we suspect that the large submodel posterior disagrees with?
+
+- How do motivate this conflict, this is case of the posterior of a model disagreeing with the prior of a model.
+
+### General thoughts?
+
+- Do we need the decision tree / DAG ?
+    - Would be ideal to get the tikz source off of Anne for these.
+- We at least need the link function for $p_{12}$.
+    - Make this plot nicer?
+
+
+Probably need to go full-bore into the background here.
 
 ## trying to demonstrate `wsre`
 
@@ -64,10 +90,23 @@ We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{
 
 See Figure&nbsp;\ref{fig:prior_prost}.
 
-```{r prior_prost, fig.cap = "prior posterior comparison for the full model. Suggest splitting on something like $p_{12}$, where there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Maybe $p_{6}$ as well, but that looks like a kernel-boundary nightmare."}
+```{r prior_prost, fig.cap = "Distributional comparison for the various models and splits. For maximum conflict, the figure suggests splitting on $p_{12}$ as there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Similar reasoning may motivate splitting on $p_{6}$, but given the proximity to the support boundary, this may be a different challenge."}
 knitr::include_graphics("plots/hiv-example/prior-post-compare.pdf")
 ```
 
+### `wsre` impact
+
+The two purple colours of Figure&nbsp;\ref{fig:prior_prost} pertain to stage one samples (of model two) from 
+\[
+    \frac {
+        \pd_{2}(\phi, \psi_{2}, Y_{2})
+    } {
+        \pd_{2}(\phi)
+    }
+\]
+
+The $\hat{\pd_{2}'}(\phi)$ are the stage one target samples using the `wsre` estimate.
+The difference between the two is not considerable, but the slight shift to the right in the `wsre` estimates implies that we had an underestimate, in the ROI, of the prior marginal beforehand.
 
 ## Link function specification
 
