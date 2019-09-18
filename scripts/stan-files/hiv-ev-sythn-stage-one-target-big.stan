@@ -72,14 +72,14 @@ transformed parameters {
 model {
   // jeffereys priors
   aa ~ beta(1, 2);
-  bb ~ beta(1, 2);
-  cc ~ beta(1, 1);
-  dd ~ beta(1, 1);
-  ee ~ beta(1, 1);
+  bb ~ beta(1, 9);
+  cc ~ beta(1, 9);
+  dd ~ beta(1, 9);
+  ee ~ beta(1, 9);
   ff ~ beta(1, 1);
   gg ~ beta(1, 1);
   hh ~ beta(1, 1);
-  ww ~ beta(1, 1);
+  ww ~ beta(3, 1);
 
   // likelihood - drops the 12th study
   y_obs[1 : (n_studies - 1)] ~ binomial(n_obs[1 : (n_studies - 1)], p[1 : (n_studies - 1)]);

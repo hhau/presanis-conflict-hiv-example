@@ -24,104 +24,88 @@ knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align =
 
 # HIV Conflict model
 
-The HIV example of @ades:cliffe:02 and @presanis:etal:13 considers an evidence synthesis model for inferring the efficacy of screening HIV in prenatal clinics.
-The evidence synthesis model has 8 _basic parameters_ $a, b, \ldots, h$ , which are the probabilities of the women in the prenatal clinics belonging to certain risk groups. 
-The first risk group considers women born in sub-Saharan Africa (SSA), women injecting drug users (IDU), and the remaining women, which have corresponding probabilities $a, b$, and  $1 - a - b$.
-Conditional on this response, the populations are then partitioned based on whether they are HIV infected, which have probabilities $c, d$ and $e$ respectively, and if they have already been diagnosed prior to visiting the clinic, with probabilities $f, g$ and $h$.
+The HIV example of @ades:cliffe:02 and @presanis:etal:13 considers an evidence synthesis model for inferring the efficacy of HIV screening in prenatal clinics.
+The evidence synthesis model has 8 _basic parameters_ $a, b, \ldots, h$ , which are group membership probabilities for certain risk groups and subgroups thereof.
+The first risk group partitions the prenatal clinic attendees into those born in sub-Saharan Africa (SSA), injecting drug users (IDU), and the remaining women, which have corresponding probabilities $a, b$, and  $1 - a - b$.
+Conditional on this response, the populations are then subdivided based on whether they are infected with HIV, which have probabilities $c, d$ and $e$ respectively, and if they have already been diagnosed prior to visiting the clinic, with probabilities $f, g$ and $h$.
 @presanis:etal:13 define _direct evidence_ as a study that pertains directly to one of these basis parameters, with _indirect evidence_ as a study that relates to a basic parameter through a deterministic link function.
-An additional probability is also included in the model, denoted $w$, but it is not of primary interest, as it merely permits the inclusion of additional studies which further inform the basic parameters.
+An additional probability is also included in the model, denoted $w$, which considers the prevalence of HIV serotype B.
+This additional parameter enables the inclusion of an additional study which further inform the other basic parameters.
+Table&nbsp;\ref{tab:HIV-data} summarises the basic parameters and their link functions, and Figure&nbsp;\ref{fig:hiv_model_tree} contains the decision tree that segments the prenatal clinic attendee populace into the various risk groups.
+
+\input{tex-input/hiv-intro/0020-link-function-table.tex}
+
+```{r hiv_model_tree, fig.cap = "Decision tree and corresponding basic parameters in the HIV example. Reproduced from Presanis et al. (2013)."}
+knitr::include_graphics("plots/hiv-example/HIVtree.pdf")
+```
+
+## Model particulars
 
 Our particular interest is in study 12, which informs the probability $p_{12}$, and provides indirect evidence for the basic parameters through the deterministic link function
 \input{tex-input/hiv-intro/0010-study-link-function.tex}
-We consider melding on the node corresponding to $p_{12}$. 
-To do so, we first consider the rest of the model, not including the study data $Y_{12}$ but still including $p_{12}$, and call this the large submodel, or submodel 1.
-The second submodel, consisting of the study data $Y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel 2. 
-@presanis:etal:13 investigated the effect or performing a _node split_ on this parameter to diagnose conflict between studies, hence we suspect that the large submodel posterior disagrees with?
+We consider melding on the node corresponding to $p_{12}$, i.e. $\phi = \{p_{12}\}$.
+The first submodel, consisting of the study data $y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel 1.
+Mathematically,
+\input{tex-input/hiv-submodels/0010-study-12-submodel.tex}
+where we are free to choose $pd_{1}(\phi)$.
+The other submodel considers the remaining studies and the induced prior on $p_{12}$, i.e. not including $y_{12}$ but still including $p_{12}$.
+We refer to this as the large submodel, or submodel 2, and define it as
+\input{tex-input/hiv-submodels/0020-big-submodel.tex}
+which implicitly contains $p_{12}$.
+@presanis:etal:13 investigates the effects of performing _node splits_ on the study probabilities as a means of diagnosing conflict between individual studies and the overall model.
+The presence of conflict and unknown prior marginal distributions on the study indicates that our methodology for more accurately estimating self-density ratios is applicable.
 
-- How do motivate this conflict, this is case of the posterior of a model disagreeing with the prior of a model.
+## Prior data conflict for $p_{12}$
 
-### General thoughts?
+Initial experiments suggest that there is conflict between the induced prior on $p_{12}$, using the uninformative priors of @ades:cliffe:02, and the subposterior $\pd(p_{12} \mid y_{12})$.
+This is driven by the flat prior on $w$, which causes an accumulation of probability mass of the a priori distribution for $p_{12}$ near $1$.
+To exacerbate this conflict, we motivate the use of a slightly misspecified prior for $w \sim \text{Beta}(3, 1)$, by considering a reasonable prior for the time and place in which the study was constructed, and noting that the distribution of HIV serotypes differs considerably between North America and sub-Saharan Africa [@hemelaar:12].
+This misspecified prior causes more probability mass to accumulate at the boundary, and the accuracy of the naive KDE estimate to decrease in the region of high posterior probability.
 
-- Do we need the decision tree / DAG ?
-    - Would be ideal to get the tikz source off of Anne for these.
-- We at least need the link function for $p_{12}$.
-    - Make this plot nicer?
+## Notation and submodels
 
+Define the full data as the information from all 12 studies $Y = \{y_{1}, \ldots, y_{12}, n_{1}, \ldots, n_{12}\}$.
+We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{12}\}$ and $Y_{2} = \{y_{1}, \ldots, y_{11}, n_{1}, \ldots, n_{11}\}$.
+There is a tacit prior on $\phi$ in the $m = 2$ model, and we get to choose an explicit prior in then $m = 1$ case.
+We opt for a flat $\text{Beta}(1, 1)$ prior on $\phi$ to not distract from the conflict between the subposterior and the induced prior.
+The pooled prior is formed using equally weighted logarithmic pooling, with weights equal to $1 \mathop{/} 2$.
+This permits the use of the weighted self-density ratio estimate in both the stage one and stage two targets, through the prior marginal self-density ratio and the pooled prior respectively.
 
-Probably need to go full-bore into the background here.
+## Practicalities
 
-## trying to demonstrate `wsre`
+Unless otherwise stated, 5000 samples are drawn from each density.
+When MCMC is required, 5 chains are run to convergence, then 1000 samples are drawn from each chain.
+The number of weighting functions $\Nw = 20$ for the `wsre` estimate, each using 500 MCMC samples.
+This is comparable to the amount of information used for the naive KDE estimate, as the correlated nature of the MCMC samples means that each sample is less informative than the independent sample drawn from the prior.
 
-### Splitting on the basic parameters
+# Full prior/posterior comparison
 
-- Splitting on the base parameters $a, b, c, d, g, w$ is not going to yield conflict, as the prior on them is known, and Jeffereys.
-- However, $\pd_{1}(\phi \mid Y_{1}), \pd_{2}(\phi \mid Y_{2})$ should conflict with each other (that's what the paper is about).
-- Probably implies $\pd_{1}(\phi \mid Y_{1}), \pd_{2}(\phi \mid Y_{2})$ conflict with $\pd_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$.
-
-### splitting on the probabilities
-
-- Much the same reasoning applies for $p_{1}, p_{2}, p_{3}, p_{4}, p_{10}, p_{11}$, as they are the same as the basic parameters
-- Hence, we should look to the more complicated nodes
-- We do not analytically know the priors on these, and I'm not sure if the complicated relationships give them any kind of weird shape.
-- If we split on $p_{9}$ say, we can choose the prior on it under one of the models.
-
-
-- Looking at the prior samples - we might have some luck with $p_{12}$?
-- It's still a bit diffuse to get the kind of underestimation we had in the normal case, though that might be due to boundaries.
-- Again, must split in the nose-to-tail kind of way.
-- If we switch to beta(2,2), what happens?
-    - More concentrated - better for conflict
-- One small hitch is that in order to get the kind of conflict we've previously looked at, we need to sample the broader model first (which means sampling the smaller bit, and then somehow going back through the transformation defined in the paper).
-    - This is possible, but tricky. might be worth it.
-    - if we split on $p_{12}$, then the induced prior under model one (the one from the big model) is heavily biased towards 1.
-    - Hard to get out into the tails in probability cases because it is constrained to be in $[0, 1]$. (hard to get the kind of numerical error that `wsre` fixes).
-    - with a flat prior on it (or even the same beta(k, k) prior?) the smaller model, that just has the 12th study in it is centred around .16.
-    - This is going to make us think about some complicated dirichlet decomposition of the remaining probability.
-    - link function is very non-invertable, 1 -> 5. Model perf will be heavily dependent on how we broadcast out the sampled value of $p_{12}$ from the earlier model to each of the base components.
-    - $p_{6}$ might also be reasonable to split on, and easier given multiplicative nature of link function.
-
-## Notation
-
-Define the full data as the information from all 12 studies $Y = \{\{y_{1}, n_{1}\}, \ldots, \{y_{12}, n_{12}\}\}$.
-We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{12}\}$ and $Y_{2} = \{\{y_{1}, n_{1}\}, \ldots, \{y_{11}, n_{11}\}\}$.
+Figure&nbsp;\ref{fig:prior_post} compares all distributions considered in various stages of the melding process, for all parameters and derived quantities.
 
 
-## full model prior/posterior comparison
-
-See Figure&nbsp;\ref{fig:prior_prost}.
-
-```{r prior_prost, fig.cap = "Distributional comparison for the various models and splits. For maximum conflict, the figure suggests splitting on $p_{12}$ as there is considerable disagreement between the induced prior on the parameter and the data-driven posterior. Similar reasoning may motivate splitting on $p_{6}$, but given the proximity to the support boundary, this may be a different challenge."}
+```{r prior_post, fig.cap = "A distributional comparison of the various distributions considered in the melding process. Conflict is immediately apparent for $p_{12}$, as there is considerable disagreement between the induced prior and the data-driven posterior."}
 knitr::include_graphics("plots/hiv-example/prior-post-compare.pdf")
 ```
 
+```{r sub_prior_post, fig.cap = "The subset of the parameters depicted in Figure \\ref{fig:prior_post}, which pertain to $p_{12}$."}
+knitr::include_graphics("plots/hiv-example/p12-prior-post-compare.pdf")
+```
+
+```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the \\texttt{wsre} estimate (blue) and without (red). The comparison is made to the quantiles obtained by sampling the joint model directly."}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
+```
+
+
 ### `wsre` impact
 
-The two purple colours of Figure&nbsp;\ref{fig:prior_prost} pertain to stage one samples (of model two) from 
-\[
-    \frac {
-        \pd_{2}(\phi, \psi_{2}, Y_{2})
-    } {
-        \pd_{2}(\phi)
-    }
-\]
-
-The $\hat{\pd_{2}'}(\phi)$ are the stage one target samples using the `wsre` estimate.
+The two purple colours of Figure&nbsp;\ref{fig:prior_post} pertain to stage one samples (of model two) from 
+\input{tex-input/hiv-submodels/0030-stage-one-target.tex}
+Specifically, $\hat{\pd_{2}'}(\phi)$ corresponds to the stage one target samples drawn using the self-density ratio estimate.
+Our interest is predominately in $p_{12}$ and its constituent parameters, hence Figure&nbsp;\ref{fig:sub_prior_post} displays the distributions of the subset of parameters that are relevant to $p_{12}$.
 The difference between the two is not considerable, but the slight shift to the right in the `wsre` estimates implies that we had an underestimate, in the ROI, of the prior marginal beforehand.
-
-## Link function specification
-
-Define $\phi = \{p_{12}\}$.
-The first submodel is then 
-\input{tex-input/submodels/0010-study-12-submodel.tex}
-where we are free to choose $\pd_{1}(\phi)$.
-The second submodel is everything else.
-
-To get the kind of conflict we need we must sample $\pd_{1}(\phi \mid Y_{1})$ first.
-These samples must then be split into the $\theta = \{a, b, d, e, w\}$ values we need.
-The rest of the basic parameters can be proposed as usual.
-
-A slightly cheating link function would be to sample the joint distribution, see what values of $\theta$ are to be expected under the melded model, and build a link function that maps to that.
-This feels like cheating because I'm using samples from the joint (if possible - why bother melding?), but we know that the $p_{1}$ submodel is much more informative? (this requires checking)
+Additionally, more of the right tail is captured, and the estimate of the median is more accurate.
+We can also compare the effect of the `wsre` methodology by considering the quantiles of $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$ obtained with and without `wsre`, and comparing them to the quantiles obtained directly from the joint posterior $\pd(\phi \mid Y)$.
+Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the `wsre` estimate has moved the entire distribution towards the joint quantiles, which we are considering to be the baseline truth.
 
 
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->

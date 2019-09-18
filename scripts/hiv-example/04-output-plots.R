@@ -22,7 +22,7 @@ wsre_stage_one_samples <- readRDS(file = "rds/hiv-example/stage-one-wsre-samples
 res <- apply(wsre_stage_one_samples, 1:2, function(x) {
   db <- x["dd"] * x["bb"]
   e1ab <- x["ee"] * (1 - x["aa"] - x["bb"])
-  p12_prop <<- (db + x["ww"] * e1ab) / (db + e1ab)
+  p12_prop <- (db + x["ww"] * e1ab) / (db + e1ab)
   return(p12_prop)
 })
 n_iter <- dim(wsre_stage_one_samples)[1]
@@ -32,6 +32,21 @@ old_dimnames <- dimnames(wsre_stage_one_samples)
 old_dimnames[[3]] <- c(old_dimnames[[3]], "p[12]")
 wsre_stage_one_samples <- abind(wsre_stage_one_samples, res, along = 3)
 dimnames(wsre_stage_one_samples) <- old_dimnames
+
+# TODO: read in the stage two samples (and the stage two wsre samples!)
+stage_two_samples <- readRDS("rds/hiv-example/stage-two-samples.rds")
+stage_two_p12_samples <- stage_two_samples$phi_samples
+old_s2_dimnames <- dimnames(stage_two_p12_samples)
+new_s2_dimnames <- old_s2_dimnames
+new_s2_dimnames[[3]] <- "p[12]"
+dimnames(stage_two_p12_samples) <- new_s2_dimnames
+
+wsre_stage_two_samples <- readRDS("rds/hiv-example/stage-two-wsre-samples.rds")
+wsre_stage_two_p12_samples <- wsre_stage_two_samples$phi_samples
+wsre_old_s2_dimnames <- dimnames(wsre_stage_two_p12_samples)
+wsre_new_s2_dimnames <- wsre_old_s2_dimnames
+wsre_new_s2_dimnames[[3]] <- "p[12]"
+dimnames(wsre_stage_two_p12_samples) <- wsre_new_s2_dimnames
 
 pars_of_interest <- readRDS(file = "rds/hiv-example/pars-of-interest.rds")
 
@@ -64,31 +79,55 @@ bp_wsre_stage_one <- bayesplot::mcmc_intervals(
   wsre_stage_one_samples
 )
 
+bp_stage_two <- bayesplot::mcmc_intervals(
+  stage_two_p12_samples
+)
+
+bp_wsre_stage_two <- bayesplot::mcmc_intervals(
+  wsre_stage_two_p12_samples
+)
+
 prior_data <- bp_prior$data
 subpost_data <- bp_subpost$data
 small_subpost_data <- bp_small_subpost$data
 post_data <- bp_post$data
 stage_one_data <- bp_stage_one$data
 wsre_stage_one_data <- bp_wsre_stage_one$data
+stage_two_data <- bp_stage_two$data
+wsre_stage_two_data <- bp_wsre_stage_two$data
 
-prior_data$dtype <- "cc_prior"
-subpost_data$dtype <- "bb_subpost"
-small_subpost_data$dtype = "ba_subpost"
-wsre_stage_one_data$dtype <- "ab_wsre_stage_one_target"
-stage_one_data$dtype <- "ab_stage_one_target"
-post_data$dtype <- "aa_post"
 
-full_data <- dplyr::bind_rows(prior_data, subpost_data, small_subpost_data, post_data, stage_one_data, wsre_stage_one_data)
+prior_data$dtype <- "h_prior"
+subpost_data$dtype <- "g_subpost"
+small_subpost_data$dtype = "f_subpost"
+wsre_stage_one_data$dtype <- "e_wsre_stage_one_target"
+stage_one_data$dtype <- "d_stage_one_target"
+wsre_stage_two_data$dtype <- "c_wsre_stage_two_target"
+stage_two_data$dtype <- "b_stage_two_target"
+post_data$dtype <- "a_post"
+
+full_data <- dplyr::bind_rows(
+  prior_data,
+  subpost_data,
+  small_subpost_data,
+  post_data,
+  stage_one_data,
+  wsre_stage_one_data,
+  stage_two_data,
+  wsre_stage_two_data
+)
+
 full_data <- tidyr::complete(full_data, dtype, parameter)
 
 ## TODO: move this else where, need more colours for the moment
 purples <- RColorBrewer::brewer.pal(4, name = "Purples")
+oranges <- RColorBrewer::brewer.pal(4, name = "Oranges")
 
 # We need to do some tidy-ing here
 # The p[\d+]'s need zero-padding.
 # The base parameters need prepending with base_
 # zero padding first 
-values <- sprintf("p[%02d]", 1:12)
+values <- sprintf("italic(p)[%02d]", 1:12)
 names(values) <- sprintf("p[%d]", 1:12)
 full_data$parameter <- full_data$parameter %>% 
   recode(!!!values)
@@ -102,7 +141,29 @@ prepend_values <- sapply(
   }
 ) 
 full_data$parameter <- full_data$parameter %>% 
-  recode(!!!prepend_values) 
+  recode(!!!prepend_values) %>% 
+  as.factor()
+
+# Hack because I want `w` to come before the probabilities
+limits_vec <- levels(full_data$parameter)
+new_limits_vec <- c(
+  limits_vec[1 : 8],
+  limits_vec[21],
+  limits_vec[9 : 20]
+)
+
+plot_pars <- c(
+  "italic(p)[12]",
+  "italic(a)",
+  "italic(b)",
+  "italic(d)",
+  "italic(e)",
+  "italic(w)"
+)
+
+sub_data <- full_data %>% 
+  filter(parameter %in% plot_pars)
+
 
 p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype), col = dtype)) +
   geom_boxplot(
@@ -118,20 +179,24 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
   scale_discrete_manual(
     aesthetics = "col",
     values = c(
-      cc_prior = as.character(blues[2]),
-      bb_subpost = as.character(greens[1]),
-      ba_subpost = as.character(greens[4]),
-      ab_wsre_stage_one_target = purples[2],
-      ab_stage_one_target = purples[4],
-      aa_post = highlight_col
+      h_prior = as.character(blues[2]),
+      g_subpost = as.character(greens[1]),
+      f_subpost = as.character(greens[4]),
+      e_wsre_stage_one_target = purples[2],
+      d_stage_one_target = purples[4],
+      c_wsre_stage_two_target = oranges[2],
+      b_stage_two_target = oranges[4],
+      a_post = highlight_col
     ),
     labels = c(
-      cc_prior = expression("p"(phi)),
-      bb_subpost = expression("p"[2](phi~"|"~"Y"[2])),
-      ba_subpost = expression("p"[1](phi~"|"~"Y"[1])),
-      ab_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
-      ab_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
-      aa_post = expression("p"(phi~"|"~"Y"))
+      h_prior = expression("p"[2](phi)),
+      g_subpost = expression("p"[2](phi~"|"~"Y"[2])),
+      f_subpost = expression("p"[1](phi~"|"~"Y"[1])),
+      e_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
+      d_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
+      c_wsre_stage_two_target = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      b_stage_two_target = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      a_post = expression("p"(phi~"|"~"Y"))
     ),
     guide = guide_legend(reverse = TRUE)
   ) +
@@ -139,12 +204,64 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
   xlab("Parameter") +
   ylab("Probability") +
   scale_x_discrete(
+    limits = new_limits_vec,
     labels = function(x) parse(text = x)
   ) +
   coord_flip() +
   NULL
 
- ggsave_fullpage(
+p2 <- ggplot(sub_data, aes(x = parameter, group = interaction(parameter, dtype), col = dtype)) +
+  geom_boxplot(
+    aes(
+      ymin = ll,
+      lower = l,
+      middle = m,
+      upper = h,
+      ymax = hh
+    ),
+    stat = "identity"
+  ) +
+  scale_discrete_manual(
+    aesthetics = "col",
+    values = c(
+      h_prior = as.character(blues[2]),
+      g_subpost = as.character(greens[1]),
+      f_subpost = as.character(greens[4]),
+      e_wsre_stage_one_target = purples[2],
+      d_stage_one_target = purples[4],
+      c_wsre_stage_two_target = oranges[2],
+      b_stage_two_target = oranges[4],
+      a_post = highlight_col
+    ),
+    labels = c(
+      h_prior = expression("p"[2](phi)),
+      g_subpost = expression("p"[2](phi~"|"~"Y"[2])),
+      f_subpost = expression("p"[1](phi~"|"~"Y"[1])),
+      e_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
+      d_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
+      c_wsre_stage_two_target = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      b_stage_two_target = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      a_post = expression("p"(phi~"|"~"Y"))
+    ),
+    guide = guide_legend(reverse = TRUE)
+  ) +
+  labs(col = "QoI") +
+  xlab("Parameter") +
+  ylab("Probability") +
+  scale_x_discrete(
+    limits = new_limits_vec[new_limits_vec %in% plot_pars],
+    labels = function(x) parse(text = x)
+  ) +
+  coord_flip() +
+  NULL
+
+
+ggsave_fullpage(
   filename = "plots/hiv-example/prior-post-compare.pdf",
   plot = p1
+)
+
+ggsave_halfheight(
+  filename = "plots/hiv-example/p12-prior-post-compare.pdf",
+  plot = p2
 )

@@ -1,8 +1,9 @@
 data {
-  real wf_mean;
-  real <lower = 0> wf_sd;
+  int <lower = 1> target_dimension;
+  real wf_mean [target_dimension];
+  real <lower = 0> wf_sd [target_dimension];
   real <lower = 0> wf_exponent;
-  int <lower = 1> target_dimension; // for future use
+   // for future use
 }
 
 transformed data {
@@ -11,7 +12,8 @@ transformed data {
 
 parameters {
   real <lower = 0, upper = 1> aa;
-  real <lower = 0, upper = 1> zz;
+  // real <lower = 0, upper = 1> zz;
+  real <lower = 0, upper = 1> bb;
   real <lower = 0, upper = 1> cc;
   real <lower = 0, upper = 1> dd;
   real <lower = 0, upper = 1> ee;
@@ -23,7 +25,7 @@ parameters {
 
 transformed parameters {
   real <lower = 0, upper = 1> p [n_studies];
-  real <lower = 0, upper = 1> bb = zz * (1 - aa);
+  // real <lower = 0, upper = 1> bb = zz * (1 - aa);
   real ca = cc * aa;
   real db = dd * bb;
   
@@ -37,7 +39,7 @@ transformed parameters {
   real we1ab = ww * e1ab;
 
   // wsre
-  real x;
+  real x [target_dimension];
  
   // probabilities
   p[1] = aa;
@@ -53,19 +55,20 @@ transformed parameters {
   p[11] = ww;
   p[12] = (db + we1ab) / (db + e1ab);
 
-  x = p[12];
+  x[1] = p[12];
 }
 
 model {
   aa ~ beta(1, 2);
-  zz ~ beta(1, 1);
-  cc ~ beta(1, 1);
-  dd ~ beta(1, 1);
-  ee ~ beta(1, 1);
+  // zz ~ beta(1, 1);
+  bb ~ beta(1, 9);
+  cc ~ beta(1, 9);
+  dd ~ beta(1, 9);
+  ee ~ beta(1, 9);
   ff ~ beta(1, 1);
   gg ~ beta(1, 1);
   hh ~ beta(1, 1);
-  ww ~ beta(1, 1);
+  ww ~ beta(3, 1);
   target += wf_exponent * normal_lpdf(x | wf_mean, wf_sd);
 }
 

@@ -39,9 +39,9 @@ par_names <- c("aa", "bb", "cc", "dd", "ee", "ff", "gg", "hh", "ww")
 n_par <- length(par_names)
 
 # setup stage one containers
-n_iter <- (50000 + 2000)
-n_chain <- 6
-thin_vec <- round(seq(from = 2000, to = n_iter, length.out = 2000))
+n_iter <- (10000 + 200)
+n_chain <- 5
+thin_vec <- round(seq(from = 200, to = n_iter, length.out = 1000))
 
 # tuning parameters
 prop_sigma <- c(

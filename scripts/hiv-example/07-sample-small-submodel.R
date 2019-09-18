@@ -15,8 +15,11 @@ stan_data <- list(
 model_fit <- sampling(
   prefit,
   data = stan_data,
-  cores = 4,
-  chains = 4
+  cores = 5,
+  chains = 5,
+  iter = 2000,
+  warmup = 1000,
+  control = list(adapt_delta = 0.9, max_treedepth = 12)
 )
 
 mcmc_samples <- extract(model_fit, pars = "p_12", permuted = FALSE)

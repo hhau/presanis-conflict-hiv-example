@@ -52,14 +52,14 @@ transformed parameters {
 model {
   // jeffereys priors
   aa ~ beta(1, 2);
-  bb ~ beta(1, 2);
-  cc ~ beta(1, 1);
-  dd ~ beta(1, 1);
-  ee ~ beta(1, 1);
+  bb ~ beta(1, 9);
+  cc ~ beta(1, 9);
+  dd ~ beta(1, 9);
+  ee ~ beta(1, 9);
   ff ~ beta(1, 1);
   gg ~ beta(1, 1);
   hh ~ beta(1, 1);
-  ww ~ beta(1, 1);
+  ww ~ beta(3, 1);
 
   // likelihood
   y_obs ~ binomial(n_obs, p);

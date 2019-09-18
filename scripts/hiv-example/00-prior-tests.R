@@ -1,4 +1,5 @@
 # checking out the new prior on p_{12}
+library(dplyr)
 
 n_sim <- 5e3
 
