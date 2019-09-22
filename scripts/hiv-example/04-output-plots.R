@@ -255,7 +255,6 @@ p2 <- ggplot(sub_data, aes(x = parameter, group = interaction(parameter, dtype),
   coord_flip() +
   NULL
 
-
 ggsave_fullpage(
   filename = "plots/hiv-example/prior-post-compare.pdf",
   plot = p1
@@ -264,4 +263,108 @@ ggsave_fullpage(
 ggsave_halfheight(
   filename = "plots/hiv-example/p12-prior-post-compare.pdf",
   plot = p2
+)
+
+# New version of plot
+
+# get the p[12] only data
+new_plot_tbl <- sub_data %>% 
+  filter(parameter == "italic(p)[12]") %>% 
+  mutate(parameter = as.character(parameter))
+
+# get the new data for the p[1](phi) prior
+p1_phi_prior_samples <- array(
+  data = runif(n = 2500),
+  dim = c(500, 5, 1),
+  dimnames = list(
+    sprintf("Iteration: %d", 1:500),
+    sprintf("Chain: %d", 1:5),
+    "italic(p)[12]"
+  )
+)
+
+p1_phi_prior_data <- bayesplot::mcmc_intervals_data(
+  p1_phi_prior_samples
+)
+p1_phi_prior_data$dtype <- "hh_prior"
+p1_phi_prior_data <- p1_phi_prior_data %>% 
+  mutate(parameter = as.character(parameter))
+
+boxplot_gap <- 1
+x_axis_data <- tibble(
+  dtype = c(
+    new_plot_tbl$dtype,
+    p1_phi_prior_data$dtype
+  ), 
+  x_val = c(
+    0, # a_post
+    1, # b_stage_two_target
+    2, # c_wsre_stage_two_target
+    3 + boxplot_gap, # d_stage_one_target
+    4 + boxplot_gap, # e_wsre_stage_one_target
+    5 + 2 * boxplot_gap, # f_subpost
+    6 + 2 * boxplot_gap, # g_subpost
+    7 + 3 * boxplot_gap, # h_prior
+    8 + 3 * boxplot_gap # hh_prior
+  ),
+  fill = c(
+    highlight_col, # a_post
+    oranges[3], # b_stage_two_target
+    oranges[1], # c_wsre_stage_two_target
+    purples[3], # d_stage_one_target
+    purples[1], # e_wsre_stage_one_target
+    greens[3], # f_subpost
+    greens[2], # g_subpost
+    blues[3], # h_prior
+    blues[2] # hh_prior
+  )
+)
+
+p12_only_data <- new_plot_tbl %>% 
+  bind_rows(p1_phi_prior_data) %>% 
+  left_join(x_axis_data, by = "dtype") %>% 
+  mutate(x_val = as.integer(x_val))
+
+p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
+  geom_boxplot(
+    aes(
+      ymin = ll,
+      lower = l,
+      middle = m,
+      upper = h,
+      ymax = hh
+    ),
+    stat = "identity",
+    fill = p12_only_data$fill
+  ) +
+  coord_flip() + 
+  scale_x_discrete(
+    limits = p12_only_data$x_val,
+    labels = rev(
+      c(
+        "11" = expression("p"[1](phi)),
+        "10" = expression("p"[2](phi)),
+        "8" = expression("p"[2](phi~"|"~"Y"[2])),
+        "7" = expression("p"[1](phi~"|"~"Y"[1])),
+        "5" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
+        "4" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
+        "2" = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+        "1" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+        "0" = expression("p"(phi~"|"~"Y"))
+      )
+    )
+  ) +
+  xlab("") +
+  ylab(expression(phi)) +
+  ggtitle(
+    expression(phi=="p"[12]~": Melding distributions")
+  ) +
+  theme(
+    axis.text = element_text(size = rel(1.0))
+  ) +
+  NULL
+
+ggsave_halfheight(
+  filename = "plots/hiv-example/p12-only-melding-dists.pdf",
+  plot = p3
 )

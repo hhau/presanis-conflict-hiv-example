@@ -59,7 +59,14 @@ p1 <- ggplot(plot_tbl, aes(x = x, y = y, col = grp)) +
       "a_WSRE" = "WSRE",
       "b_No-WSRE" = "No WSRE"
     )
-  )
+  ) +
+  scale_x_continuous(
+    limits = c(0.15, 0.45)
+  ) +
+  scale_y_continuous(
+    limits = c(0.15, 0.45)
+  ) +
+  coord_fixed()
 
 ggsave_halfheight(
   filename = "plots/hiv-example/posterior-qq-plot.pdf",

@@ -5,15 +5,15 @@ theme_set(theme_classic())
 theme_replace(
   panel.grid.major = element_line(),
   panel.grid.minor = element_line(linetype = "dashed", size = rel(2/3)),
-  legend.text = element_text(size = rel(1.1)),
-  legend.title = element_text(size = rel(1.1))
+  legend.text = element_text(size = rel(1.25)),
+  legend.title = element_text(size = rel(1.25))
 )
 
 # Colours - should all be darkest[1] to lightest[n] 
 blues <- c(
-  dark = "#00214F",
-  mid = "#2C7FB8",
-  light = "#A6E9FF"
+  "#00214F",
+  "#2C7FB8",
+  "#A6E9FF"
 ) 
 
 greens <- c(

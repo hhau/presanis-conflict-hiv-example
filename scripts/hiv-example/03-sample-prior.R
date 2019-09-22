@@ -27,7 +27,7 @@ index_vec <- apply(prior_samples, 1, function(x_mat) {
 })
 prior_samples <- prior_samples[index_vec, , ,drop = FALSE]
 
-n_prior_samples <- 5000
+n_prior_samples <- 2500
 
 prior_samples <- prior_samples[
   sample(x = 1 : sum(index_vec), n_prior_samples / 5, replace = T),

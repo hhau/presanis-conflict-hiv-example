@@ -1,0 +1,54 @@
+\begin{figure}[!ht]
+  \centering
+  \begin{tikzpicture}[node distance = 1.75cm, thick, state/.style={circle, draw, minimum width = 1cm}]
+    % Node definition
+    \node [state] (y12) {$y_{12}$};
+    \node [state, opacity=0.5][left = of y12] (y11) {$y_{11}$};
+    \node [state, opacity=0.5][left = of y11] (y10) {$y_{10}$};
+    \node [state, opacity=0.5][left = of y10] (y9) {$y_{9}$};
+
+    \node [state] [above = of y12] (p12) {$p_{12}$};
+    \node [state, opacity=0.5] [left = of p12] (p11) {$p_{11}$};
+    \node [state, opacity=0.5] [left = of p11] (p10) {$p_{10}$};
+    \node [state, opacity=0.5] [left = of p10] (p9) {$p_{9}$};
+    
+    \node [state] [above = of p12] (w) {$w$};
+    \node [state] [left = of w] (e) {$e$};
+    \node [state] [left = of e] (d) {$d$};
+    \node [state] [left = of d] (b) {$b$};
+    \node [state] [left = of b] (a) {$a$};
+
+    % Blank nodes?
+    \coordinate [left = of a] (high);
+    \coordinate [below =2.75cm of high] (mid);
+    \coordinate [below =2.75cm of mid] (low);
+
+    % Line definition
+    \draw [->] (p12) edge (y12);
+    \draw [opacity=0.5] [->] (p11) edge (y11);
+    \draw [opacity=0.5] [->] (p10) edge (y10);
+    \draw [opacity=0.5][->] (p9) edge (y9);
+    
+    \draw [dashed] [->] (w) edge (p12);
+    \draw [dashed] [->] (e) edge (p12);
+    \draw [dashed] [->] (d) edge (p12);
+    \draw [dashed] [->] (b) edge (p12);
+    \draw [dashed] [->] (a) edge (p12);
+
+    \draw [dashed, opacity=0.15] [->] (high) edge (p11);
+    \draw [dashed, opacity=0.15] [->] (high) edge (p10);
+
+    \draw [dashed, opacity=0.15] [->] (a) edge (p9);
+    \draw [dashed, opacity=0.15] [->] (b) edge (p9);
+    \draw [dashed, opacity=0.15] [->] (d) edge (p9);
+    \draw [dashed, opacity=0.15] [->] (e) edge (p9);
+
+    % Dotted lines?
+    \draw [loosely dotted, opacity=0.75] (a) -- (high.center);
+    \draw [loosely dotted, opacity=0.75] (p9) -- (mid.center);
+    \draw [loosely dotted, opacity=0.75] (y9) -- (low.center);
+
+  \end{tikzpicture}
+  \caption{Partial directed acyclic graph (DAG) for the HIV model. The top row only depicts nodes that relate to $p_{12}$. Dashed lines indicate deterministic, potentially non-invertible, relationships between nodes. Solid lines indicate stochastic relationships.}
+  \label{fig:model-dag}
+\end{figure}

@@ -25,7 +25,9 @@ DATA_HIV = $(RDS_HIV)/hiv-data.rds
 PARS_HIV = $(RDS_HIV)/pars-of-interest.rds
 
 ALL_PLOTS = $(PLOTS_HIV)/prior-post-compare.pdf \
-	$(PLOTS_HIV)/posterior-qq-plot.pdf
+	$(PLOTS_HIV)/posterior-qq-plot.pdf \
+	$(PLOTS_HIV)/p12-prior-post-compare.pdf \
+  $(PLOTS_HIV)/p12-only-melding-dists.pdf 
 
 all : $(WRITEUP) 
 
@@ -61,6 +63,10 @@ $(RDS_HIV)/stage-one-wsre-samples.rds : $(SCRIPTS_HIV)/10-stage-one-wsre-est.R $
 
 $(PLOTS_HIV)/prior-post-compare.pdf : $(SCRIPTS_HIV)/04-output-plots.R $(PLOT_SETTINGS) $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/full-model-fit.rds $(PARS_HIV) $(RDS_HIV)/big-submodel-samples.rds $(RDS_HIV)/small-submodel-samples.rds $(RDS_HIV)/stage-one-samples.rds $(RDS_HIV)/stage-one-wsre-samples.rds $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.RDS
 	$(RSCRIPT) $<
+
+$(PLOTS_HIV)/p12-prior-post-compare.pdf : $(PLOTS_HIV)/prior-post-compare.pdf
+
+$(PLOTS_HIV)/p12-only-melding-dists.pdf : $(PLOTS_HIV)/prior-post-compare.pdf
 
 # this is a bit of a kludge because I `source` 11- as part of 12-
 $(RDS_HIV)/stage-two-samples.rds : $(SCRIPTS_HIV)/12-stage-two-melded-posterior.R $(SCRIPTS_HIV)/11-stage-two-priors.R $(PARS_HIV) $(DATA_HIV) $(RDS_HIV)/stage-one-samples.rds $(RDS_HIV)/prior-samples.rds

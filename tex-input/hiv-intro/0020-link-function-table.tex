@@ -1,22 +1,23 @@
 \begin{table}
-\caption{\label{tab:HIV-data}HIV example: data sources and the parameters they inform. ``SSA'' denotes sub-Saharan Africa and ``IDU'' denotes injecting drug using. ``Seroprevalence'' is the prevalence of HIV antibodies in blood samples from a ``sero-survey''. Reproduced from Presanis et al. (2013).}
-\begin{tabular}{rp{4.5cm}p{4cm}rrr}
+\centering
+\caption{\label{tab:HIV-data}HIV example: Study probabilities, their relationships to the basic parameters, and data used to inform the probabilities. For full details on the source of the data see Presanis et al. (2013).}
+\begin{tabular}{p{4cm}rrr}
 \toprule
-\em Source & \em Description of data & \em Parameter & \em Data & & \\ 
- &  &  & \em $y$ & \em $n$ & \em $y \mathop{/} n$ \\ 
+\em Parameter & \em Data & & \\ 
+ & \em $y$ & \em $n$ & \em $y \mathop{/} n$ \\ 
 \midrule
-1 & Proportion of women born in SSA, 1999 & $p_1 = a$ & $11,044$ & 104,577 & 0.106 \\ 
-2 & Proportion of women who are IDU in the last 5 years & $p_2 = b$ & 12 & 882 & 0.014 \\ 
-3 & HIV prevalence in women born in SSA, 1997-1998 & $p_3 = c$ & 252 & 15,428 & 0.016 \\ 
-4 & HIV prevalence in IDU women, 1997-1999 & $p_4 = d$ & 10 & 473 & 0.021 \\ 
-5 & HIV prevalence in women not born in SSA, 1997-1998 & $p_5 = \frac{db + e(1-a-b)}{1-a}$ & 74 & 136,139 & 0.001 \\ 
-6 & HIV seroprevalence in pregnant women, 1999 & $p_6 = ca + db + e(1-a-b)$ & 254 & 102,287 & 0.002 \\ 
-7 & Diagnosed HIV in SSA-born women as a proportion of all diagnosed HIV, 1999 & $p_7 = \frac{fca}{fca + gdb + he(1-a-b)}$ & 43 & 60 & 0.717 \\ 
-8 & Diagnosed HIV in IDU women as a proportion of diagnosed HIV in non-SSA-born women, 1999 & $p_8 = \frac{gdb}{gdb + he(1-a-b)}$ & 4 & 17 & 0.235 \\ 
-9 & Overall proportion of HIV diagnosed & $p_9 = \frac{fca+gdb+he(1-a-b)}{ca + db + e(1-a-b)}$ & 87 & 254 & 0.343 \\ 
-10 & Proportion of infected IDU women diagnosed, 1999 & $p_{10} = g$ & 12 & 15 & 0.800 \\ 
-11 & Proportion of infected SSA-born women with serotype B, 1997-1998 & $p_{11} = w$ & 14 & 118 & 0.119 \\ 
-12 & Proportion of infected non-SSA-born women with serotype B, 1997-1998, assuming that $100\%$ of infected IDU women have serotype B and that infected non-SSA-born non-IDU women have the same prevalence of serotype B as infected SSA-born women & $p_{12} = \frac{db + we(1-a-b)}{db + e(1-a-b)}$ & 5 & 31 & 0.161 \\ 
+  $p_1 = a$ & $11,044$ & 104,577 & 0.106 \\[8pt] 
+  $p_2 = b$ & 12 & 882 & 0.014 \\[8pt] 
+  $p_3 = c$ & 252 & 15,428 & 0.016 \\[8pt] 
+  $p_4 = d$ & 10 & 473 & 0.021 \\[8pt] 
+  $p_5 = \frac{db + e(1-a-b)}{1-a}$ & 74 & 136,139 & 0.001 \\[8pt] 
+  $p_6 = ca + db + e(1-a-b)$ & 254 & 102,287 & 0.002 \\[8pt] 
+  $p_7 = \frac{fca}{fca + gdb + he(1-a-b)}$ & 43 & 60 & 0.717 \\[8pt] 
+  $p_8 = \frac{gdb}{gdb + he(1-a-b)}$ & 4 & 17 & 0.235 \\[8pt] 
+  $p_9 = \frac{fca+gdb+he(1-a-b)}{ca + db + e(1-a-b)}$ & 87 & 254 & 0.343 \\[8pt] 
+  $p_{10} = g$ & 12 & 15 & 0.800 \\[8pt] 
+  $p_{11} = w$ & 14 & 118 & 0.119 \\[8pt] 
+  $p_{12} = \frac{db + we(1-a-b)}{db + e(1-a-b)}$ & 5 & 31 & 0.161 \\ 
 \bottomrule
 \end{tabular}
 \end{table}
