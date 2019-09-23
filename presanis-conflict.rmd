@@ -28,10 +28,10 @@ The HIV example of @ades:cliffe:02 and @presanis:etal:13 considers an evidence s
 The evidence synthesis model has 8 _basic parameters_ $a, b, \ldots, h$ , which are group membership probabilities for certain risk groups and subgroups thereof.
 The first risk group partitions the prenatal clinic attendees into those born in sub-Saharan Africa (SSA), injecting drug users (IDU), and the remaining women, which have corresponding probabilities $a, b$, and  $1 - a - b$.
 Conditional on this response, the populations are then subdivided based on whether they are infected with HIV, which have probabilities $c, d$ and $e$ respectively, and if they have already been diagnosed prior to visiting the clinic, with probabilities $f, g$ and $h$.
-@presanis:etal:13 define _direct evidence_ as a study that pertains directly to one of these basis parameters, with _indirect evidence_ as a study that relates to a basic parameter through a deterministic link function.
+@presanis:etal:13 define _direct evidence_ as a study that pertains directly to one of these basic parameters, and _indirect evidence_ as a study that relates to the basic parameters through a deterministic link function.
 An additional probability is also included in the model, denoted $w$, which considers the prevalence of HIV serotype B.
 This parameter enables the inclusion of an extra study which further informs the other basic parameters.
-Table&nbsp;\ref{tab:HIV-data} summarises the basic parameters, their link functions, and the data used to inform the basic parameter.
+Table&nbsp;\ref{tab:HIV-data} summarises the basic parameters, their link functions, and the data used to inform the basic parameters.
 
 <!-- and Figure&nbsp;\ref{fig:hiv_model_tree} contains the decision tree that segments the prenatal clinic attendee populace into the various risk groups.
  -->
@@ -44,17 +44,18 @@ Our particular interest is in study 12, which informs the probability $p_{12}$, 
 \input{tex-input/hiv-intro/0010-study-link-function.tex}
 Figure&nbsp;\ref{fig:model-dag} contains a DAG of the basic parameters that relate to $p_{12}$.
 We consider melding on the node corresponding to $p_{12}$, i.e. $\phi = \{p_{12}\}$.
-The first submodel, consisting of the study data $y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel 1.
+The first submodel, consisting of the study data $y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel $\modelindex = 1$.
 Mathematically,
 \input{tex-input/hiv-submodels/0010-study-12-submodel.tex}
 where we are free to choose $\pd_{1}(\phi)$, and do so in Section&nbsp;\ref{notation-and-submodels}.
 The other submodel considers the remaining studies and the induced prior on $p_{12}$, i.e. not including $y_{12}$ but still including $p_{12}$.
-We refer to this as the large submodel, or submodel 2, and define it as
+We refer to this as the large submodel, or submodel $\modelindex = 2$, and define it as
 \input{tex-input/hiv-submodels/0020-big-submodel.tex}
 which implicitly contains $p_{12}$.
 @presanis:etal:13 investigates the effects of performing _node splits_ on the study probabilities as a means of diagnosing conflict between individual studies and the overall model.
-The presence of conflict and unknown prior marginal distributions on the study indicates that our methodology for more accurately estimating self-density ratios is applicable.
-This example is also useful in its simplicity, as the joint model implied by Markov melding can be fit directly, which serves as point of reference for the melded posterior computed via the multi-stage sampler. 
+This node splitting process can be reframed as an application of Markov melding.
+The presence of conflict and unknown prior marginal distributions on the nodes of interest indicates that our methodology for more accurately estimating self-density ratios is applicable.
+This example is also useful in its simplicity, as the joint model implied by Markov melding can be fit directly, which serves as a reference for the melded posterior computed via the multi-stage sampler. 
 
 \input{tex-input/hiv-submodels/0040-model-dag.tex}
 
@@ -62,8 +63,10 @@ This example is also useful in its simplicity, as the joint model implied by Mar
 
 Initial experiments suggest that there is conflict between the induced prior on $p_{12}$, using the uninformative priors of @ades:cliffe:02, and the subposterior $\pd(p_{12} \mid y_{12})$.
 This is driven by the flat prior on $w$, which causes an accumulation of probability mass near 1 in the prior on $p_{12}$.
-To exacerbate this conflict, we employ a slightly misspecified prior for $w \sim \text{Beta}(3, 1)$, by considering a reasonable prior for the time and place in which the study was constructed, and noting that the distribution of HIV serotypes differs considerably between North America and sub-Saharan Africa [@hemelaar:12].
+To exacerbate this conflict, we employ a slightly misspecified prior for $w \sim \text{Beta}(3, 1)$.
+We motivate this by considering a reasonable prior for the time and place in which the evidence synthesis was constructed, and noting that the distribution of HIV serotypes differs considerably between North America and sub-Saharan Africa [@hemelaar:12].
 This misspecified prior causes more probability mass to accumulate at the boundary, and the accuracy of the naive KDE estimate $\hat{\pd}_{2}(p_{12})$ to decrease in the region of high posterior probability.
+The accumulation is visible in the second row of Figure&nbsp;\ref{fig:p12_all_melding_dists}, and the prior-subposterior conflict is visible in the 3rd and 4th row of Figure&nbsp;\ref{fig:p12_all_melding_dists}.
 
 
 ## Notation and submodels
@@ -83,7 +86,8 @@ When MCMC is required, 5 chains are run to convergence, then 1000 samples are dr
 
 To demonstrate the effectiveness of our self-density ratio estimation methodology, we compare the melded posterior obtained using our method against the melded posterior obtained using the naive KDE estimate for the prior marginal.
 For a fair comparison, we estimate the prior marginal distribution of interest, $\hat{\pd}_{2}(\phi)$, using 2500 Monte Carlo samples, and compare this against the self-density ratio estimate produced using 2500 samples in total.
-The number of weighting functions was specified to be $\Nw = 10$ for the self-density ratio estimate of $\pd_{2}(\phi_{\text{nu}}) \mathop{/} \pd_{2}(\phi_{\text{de}})$.
+The number of weighting functions was specified to be $\Nw = 10$ for the self-density ratio estimate of 
+\input{tex-input/hiv-submodels/0050-self-ratio-estimate.tex}
 Each weighting function has a specific mean $\mu_{\wfindex}$, and all have a common variance $\sigma_{\wfindex}^{2} = 0.25^2$.
 The weighting function means consisted of $\Nw$ evenly spaced values between 0.01 and 0.99, and each weighted target had 250 post warmup MCMC samples drawn from it.
 This set-up is slightly advantageous for the naive KDE method, as it uses Monte Carlo samples, as opposed to the self-density ratio estimate's MCMC samples.
@@ -94,12 +98,12 @@ Hence, the naive KDE makes use of a sample comprised of 2500 effective samples, 
 Figure&nbsp;\ref{fig:p12_all_melding_dists} compares all distributions considered in various stages of the melding process for $\phi = p_{12}$.
 The two purple colours of Figure&nbsp;\ref{fig:p12_all_melding_dists} pertain to stage one samples (of model two) from 
 \input{tex-input/hiv-submodels/0030-stage-one-target.tex}
-Specifically, $\hat{\pd_{2}'}(\phi)$ corresponds to the stage one target samples drawn using the self-density ratio estimate.
-The difference between the two is not considerable, but the shift to the right in the `wsre` estimates implies that naive KDE had underestimated, in the ROI, the prior marginal distribution.
+Specifically, $\pd_{2}(\phi, \psi_{2}, Y_{2}) \mathop{/} \hat{\pd_{2}'}(\phi)$ corresponds to the stage one target samples drawn using the weighted self-density ratio estimate.
+The difference between the two is not considerable, but the shift to the right in the weighted self-density ratio estimate  implies that the naive KDE had underestimated, in the region of interest, the prior marginal distribution.
 Additionally, more of the right tail is captured, and the estimate of the median is more accurate.
-These differences are also present in the estimate melded posterior distributions $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$ displayed in orange in Figure&nbsp;\ref{fig:p12_all_melding_dists}.
-We can also compare the effect of the self-density methodology by considering the quantiles of $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$ obtained with and without self-density, and comparing them to the quantiles obtained directly from the joint posterior $\pd(\phi \mid Y)$.
-Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the self-density estimate has moved the entire distribution towards the joint quantiles, which we are considering to be the baseline truth.
+These differences are also present in the estimated melded posterior distributions $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$ displayed in orange in Figure&nbsp;\ref{fig:p12_all_melding_dists}.
+We can also compare the effect of our methodology by considering the quantiles of the melded posterior distributions obtained with, $\hat{\pd'}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$, and without, $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$, the weighted self-density ratio estimate, and comparing them to the quantiles obtained directly from the joint posterior $\pd(\phi \mid Y)$.
+Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the self-density estimate has moved the entire distribution towards the joint quantiles, which we consider to be the baseline truth.
 
 
 ```{r p12_all_melding_dists, fig.cap = "Boxplots of all distributions considered in the Markov melding process. From top to bottom: submodel prior distributions (blue), subposterior distributions (green), stage one target distributions with \\& without our self-density ratio estimation methodology (purple), corresponding melded posterior distributions (orange), and reference joint posterior distribution (red)."}
@@ -109,10 +113,7 @@ knitr::include_graphics("plots/hiv-example/p12-only-melding-dists.pdf")
 ```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, blue) and without (No WSRE, red). The comparison is made to the quantiles obtained by sampling the joint model directly."}
 knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
 ```
-
-
-
-
+  
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
 \newpage
 
