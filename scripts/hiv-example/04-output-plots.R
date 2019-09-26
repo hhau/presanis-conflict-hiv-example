@@ -302,8 +302,8 @@ x_axis_data <- tibble(
     2, # c_wsre_stage_two_target
     3 + boxplot_gap, # d_stage_one_target
     4 + boxplot_gap, # e_wsre_stage_one_target
-    5 + 2 * boxplot_gap, # f_subpost
-    6 + 2 * boxplot_gap, # g_subpost
+    6 + 2 * boxplot_gap, # f_subpost
+    5 + 2 * boxplot_gap, # g_subpost
     7 + 3 * boxplot_gap, # h_prior
     8 + 3 * boxplot_gap # hh_prior
   ),
@@ -344,8 +344,8 @@ p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
       c(
         "11" = expression("p"[1](phi)),
         "10" = expression("p"[2](phi)),
-        "8" = expression("p"[2](phi~"|"~"Y"[2])),
-        "7" = expression("p"[1](phi~"|"~"Y"[1])),
+        "7" = expression("p"[2](phi~"|"~"Y"[2])),
+        "8" = expression("p"[1](phi~"|"~"Y"[1])),
         "5" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
         "4" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
         "2" = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
