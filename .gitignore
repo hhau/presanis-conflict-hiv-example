@@ -17,3 +17,4 @@
 # the limit regex support of .gitignore means I have to specify this file 
 # manually
 presanis-conflict.tex
+plots/hiv-example/HIVtree.eps
