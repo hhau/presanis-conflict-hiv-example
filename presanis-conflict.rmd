@@ -32,6 +32,7 @@ Conditional on this response, the populations are then subdivided based on wheth
 An additional probability is also included in the model, denoted $w$, which considers the prevalence of HIV serotype B.
 This parameter enables the inclusion of an extra study which further informs the other basic parameters.
 Table&nbsp;\ref{tab:HIV-data} summarises the basic parameters, their link functions, and the data used to inform the basic parameters.
+The code to reproduce all the figures in this example is available at https://github.com/hhau/presanis-conflict-hiv-example.
 
 <!-- and Figure&nbsp;\ref{fig:hiv_model_tree} contains the decision tree that segments the prenatal clinic attendee populace into the various risk groups.
  -->
@@ -76,7 +77,7 @@ We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{
 There is a tacit prior on $\phi$ in the $m = 2$ model, and we get to choose an explicit prior in then $m = 1$ case.
 We opt for a flat $\text{Beta}(1, 1)$ prior on $\phi$ to not distract from the conflict between the subposterior and the induced prior.
 The pooled prior is formed using equally weighted logarithmic pooling, with weights equal to $1 \mathop{/} 2$.
-This permits the use of the weighted self-density ratio estimate in both the stage one and stage two targets, through the prior marginal self-density ratio and the pooled prior respectively.
+This permits the use of the weighted-sample self-density ratio estimate in both the stage one and stage two targets, through the prior marginal self-density ratio and the pooled prior respectively.
 
 ## Example details
 <!-- 

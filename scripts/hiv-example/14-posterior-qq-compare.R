@@ -47,7 +47,7 @@ p1 <- ggplot(plot_tbl, aes(x = x, y = y, col = grp)) +
   labs(
     col = "Method"
   ) +
-  xlab("Joint model quantiles") +
+  xlab("Directly estimated quantiles") +
   ylab("Melded model quantiles") +
   scale_discrete_manual(
     aesthetics = "col",

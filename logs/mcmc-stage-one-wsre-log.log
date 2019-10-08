@@ -98,6 +98,9 @@ INFO [2019-09-18 13:22:28] Chain: 2, Iteration: 10000
 INFO [2019-09-18 13:22:29] Chain: 3, Iteration: 10000
 INFO [2019-09-18 13:22:44] Chain: 5, Iteration: 10000
 INFO [2019-09-18 13:22:46] Chain: 4, Iteration: 10000
+
+== NEW RUN == (76 seconds for stage one using kde + stan)
+
 INFO [2019-09-22 15:47:39] Chain: 3, Iteration: 1000
 INFO [2019-09-22 15:47:40] Chain: 5, Iteration: 1000
 INFO [2019-09-22 15:47:41] Chain: 1, Iteration: 1000
@@ -148,3 +151,5 @@ INFO [2019-09-22 15:59:55] Chain: 5, Iteration: 10000
 INFO [2019-09-22 16:00:03] Chain: 1, Iteration: 10000
 INFO [2019-09-22 16:00:12] Chain: 2, Iteration: 10000
 INFO [2019-09-22 16:00:13] Chain: 4, Iteration: 10000
+
+(13 mins for our implementation)
