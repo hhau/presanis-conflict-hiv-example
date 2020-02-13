@@ -111,10 +111,11 @@ Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the 
 knitr::include_graphics("plots/hiv-example/p12-only-melding-dists.pdf")
 ```
 
-```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, blue) and without (No WSRE, red). The comparison is made to the quantiles obtained by sampling the joint model directly."}
+```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, dots) and without (Naive, crosses). The comparison is made to the quantiles obtained by sampling the joint model directly."}
 knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
 ```
-  
+
+
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
 \newpage
 

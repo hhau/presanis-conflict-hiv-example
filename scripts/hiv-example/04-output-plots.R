@@ -297,15 +297,15 @@ x_axis_data <- tibble(
     p1_phi_prior_data$dtype
   ), 
   x_val = c(
-    0, # a_post
-    1, # b_stage_two_target
-    2, # c_wsre_stage_two_target
-    3 + boxplot_gap, # d_stage_one_target
-    4 + boxplot_gap, # e_wsre_stage_one_target
-    6 + 2 * boxplot_gap, # f_subpost
-    5 + 2 * boxplot_gap, # g_subpost
-    7 + 3 * boxplot_gap, # h_prior
-    8 + 3 * boxplot_gap # hh_prior
+    0,  # a_post
+    2,  # b_stage_two_target
+    1,  # c_wsre_stage_two_target
+    5,  # d_stage_one_target
+    4,  # e_wsre_stage_one_target
+    7,  # f_subpost
+    8,  # g_subpost
+    11, # h_prior
+    10  # hh_prior
   ),
   fill = c(
     highlight_col, # a_post
@@ -342,29 +342,32 @@ p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
     limits = p12_only_data$x_val,
     labels = rev(
       c(
-        "11" = expression("p"[1](phi)),
         "10" = expression("p"[2](phi)),
-        "7" = expression("p"[2](phi~"|"~"Y"[2])),
+        "11" = expression("p"[1](phi)),
         "8" = expression("p"[1](phi~"|"~"Y"[1])),
-        "5" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
-        "4" = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
-        "2" = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
-        "1" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
-        "0" = expression("p"(phi~"|"~"Y"))
+        "7" = expression("p"[2](phi~"|"~"Y"[2])),
+        "4" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat(hat("p"))[1](phi)),
+        "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
+        "1" = expression(hat(hat("p"))["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+        "2" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+        "0" = expression("p"(phi~"|"~"Y"[1],~"Y"[2]))
       )
     )
   ) +
   xlab("") +
   ylab(expression(phi)) +
-  ggtitle(
-    expression(phi=="p"[12]~": Melding distributions")
-  ) +
+  # ggtitle(
+  #   expression(phi==pi[12])
+  # ) +
   theme(
     axis.text = element_text(size = rel(1.0))
   ) +
   NULL
 
-ggsave_halfheight(
+ggsave(
   filename = "plots/hiv-example/p12-only-melding-dists.pdf",
-  plot = p3
+  plot = p3,
+  width = 16.2,
+  height = 10,
+  units = 'cm'
 )
