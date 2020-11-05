@@ -12,6 +12,7 @@
 
 # the package directory - sometimes useful sometimes not
 #package/
+renv
 
 # I don't really like commiting the top level .tex file.
 # the limit regex support of .gitignore means I have to specify this file 

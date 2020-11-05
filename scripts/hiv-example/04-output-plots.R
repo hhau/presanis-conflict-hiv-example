@@ -7,7 +7,7 @@ library(dplyr)
 library(abind)
 
 prior_samples <- readRDS(file = "rds/hiv-example/prior-samples.rds")
-full_model_sample <- readRDS(file = "rds/hiv-example/full-model-fit.rds")
+reference_samples <- readRDS(file = "rds/hiv-example/stage-two-reference-samples.rds")$phi_samples
 big_submodel_sample <- readRDS(file = "rds/hiv-example/big-submodel-samples.rds")
 small_submodel_sample <- readRDS(file = "rds/hiv-example/small-submodel-samples.rds")
 
@@ -66,8 +66,7 @@ bp_small_subpost <- bayesplot::mcmc_intervals(
 )
 
 bp_post <- bayesplot::mcmc_intervals(
-  full_model_sample,
-  pars = pars_of_interest
+  reference_samples
 )
 
 bp_stage_one <- bayesplot::mcmc_intervals(
@@ -96,7 +95,6 @@ wsre_stage_one_data <- bp_wsre_stage_one$data
 stage_two_data <- bp_stage_two$data
 wsre_stage_two_data <- bp_wsre_stage_two$data
 
-
 prior_data$dtype <- "h_prior"
 subpost_data$dtype <- "g_subpost"
 small_subpost_data$dtype = "f_subpost"
@@ -105,6 +103,8 @@ stage_one_data$dtype <- "d_stage_one_target"
 wsre_stage_two_data$dtype <- "c_wsre_stage_two_target"
 stage_two_data$dtype <- "b_stage_two_target"
 post_data$dtype <- "a_post"
+
+post_data$parameter <- "p[12]"
 
 full_data <- dplyr::bind_rows(
   prior_data,
@@ -163,7 +163,6 @@ plot_pars <- c(
 
 sub_data <- full_data %>% 
   filter(parameter %in% plot_pars)
-
 
 p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype), col = dtype)) +
   geom_boxplot(
@@ -350,7 +349,7 @@ p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
         "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
         "1" = expression(hat(hat("p"))["meld"](phi~"|"~"Y"[1],~"Y"[2])),
         "2" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
-        "0" = expression("p"(phi~"|"~"Y"[1],~"Y"[2]))
+        "0" = expression(hat("p")["ref"](phi~"|"~"Y"[1],~"Y"[2]))
       )
     )
   ) +
