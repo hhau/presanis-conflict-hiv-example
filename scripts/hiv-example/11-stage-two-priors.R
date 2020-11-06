@@ -5,45 +5,48 @@ library(futile.logger)
 # set up the functions
 # big submodel wrse - needed if we use logarithmic pooling
 flog.info("Reading samples and wsre estimate")
-big_model_wsre <- readRDS(
-  file = "rds/hiv-example/big-sub-prior-wsre-est.rds"
-)
+big_model_wsre <- readRDS("rds/hiv-example/big-sub-prior-wsre-est.rds")
 
 # big submodel prior  samples
-big_model_prior_samples <- readRDS(file = "rds/hiv-example/prior-samples.rds")
+big_model_prior_samples <- readRDS("rds/hiv-example/prior-samples.rds")
 p12_big_model_samples <- as.matrix(as.vector(big_model_prior_samples[, 1:5, "p[12]"]))
 p12_bw <- bw.SJ(p12_big_model_samples)
+
+reference_prior_samples <- readRDS("rds/hiv-example/reference-prior-samples.rds")
+reference_phi_samples <- reference_prior_samples[, , "p[12]"] %>% as.numeric()
+reference_bw <- bw.SJ(reference_phi_samples)
 
 flog.info("Building stage two prior marginals")
 log_big_p12_prior_marginal <- function(x) {
   log(wsre:::kde_func_nd(x, p12_big_model_samples, p12_bw))
 }
 
+log_big_p12_prior_marginal_reference <- function(x) {
+  log(wsre:::kde_func_nd(x, reference_phi_samples, reference_bw))
+}
+
 # stage two / Small submodel prior marginal (free to choose this)
 log_small_p12_prior_marginal <- function(x) {
-  dbeta(x, 2, 3, log = TRUE)
+  dbeta(x, 1, 1, log = TRUE)
 }
   
 # pooled prior
 log_logarithmic_pooled_prior_no_wsre <- function(phi_nu, phi_de) {
-  0.5 * log(
+  0.5 * (
     log_big_p12_prior_marginal(phi_nu) -
     log_big_p12_prior_marginal(phi_de)
   )
-  +
+}
+
+log_logarithmic_pooled_prior_reference <- function(phi_nu, phi_de) {
   0.5 * (
-    log_small_p12_prior_marginal(phi_nu) - 
-    log_small_p12_prior_marginal(phi_de)
+    log_big_p12_prior_marginal_reference(phi_nu) -
+      log_big_p12_prior_marginal_reference(phi_de)
   )
 }
 
 log_logarithmic_pooled_prior_with_wsre <- function(phi_nu, phi_de) {
   0.5 * log(evaluate(big_model_wsre, phi_nu, phi_de))
-  +
-  0.5 * (
-    log_small_p12_prior_marginal(phi_nu) - 
-    log_small_p12_prior_marginal(phi_de)
-  )
 }
 
 # should really LSE this
