@@ -66,7 +66,7 @@ $(RDS_HIV)/big-sub-prior-wsre-est.rds : $(SCRIPTS_HIV)/09-wsre-prior-marginal.R 
 $(RDS_HIV)/stage-one-wsre-samples.rds : $(SCRIPTS_HIV)/10-stage-one-wsre-est.R $(DATA_HIV) $(STAN_FILES)/hiv-ev-sythn-big-submodel.stan $(PARS_HIV) $(RDS_HIV)/big-sub-prior-wsre-est.rds
 	$(RSCRIPT) $<
 
-$(PLOTS_HIV)/prior-post-compare.pdf : $(SCRIPTS_HIV)/04-output-plots.R $(PLOT_SETTINGS) $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/full-model-fit.rds $(PARS_HIV) $(RDS_HIV)/big-submodel-samples.rds $(RDS_HIV)/small-submodel-samples.rds $(RDS_HIV)/stage-one-samples.rds $(RDS_HIV)/stage-one-wsre-samples.rds $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds
+$(PLOTS_HIV)/prior-post-compare.pdf : $(SCRIPTS_HIV)/04-output-plots.R $(PLOT_SETTINGS) $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/stage-two-reference-samples.rds $(PARS_HIV) $(RDS_HIV)/big-submodel-samples.rds $(RDS_HIV)/small-submodel-samples.rds $(RDS_HIV)/stage-one-samples.rds $(RDS_HIV)/stage-one-wsre-samples.rds $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds
 	$(RSCRIPT) $<
 
 $(PLOTS_HIV)/p12-prior-post-compare.pdf : $(PLOTS_HIV)/prior-post-compare.pdf
@@ -83,5 +83,5 @@ $(RDS_HIV)/stage-two-reference-samples.rds : $(SCRIPTS_HIV)/12-stage-two-melded-
 $(RDS_HIV)/stage-two-wsre-samples.rds : $(SCRIPTS_HIV)/13-stage-two-melded-posterior-wsre.R $(SCRIPTS_HIV)/11-stage-two-priors.R $(PARS_HIV) $(DATA_HIV) $(RDS_HIV)/stage-one-wsre-samples.rds $(RDS_HIV)/prior-samples.rds $(RDS_HIV)/big-sub-prior-wsre-est.rds
 	$(RSCRIPT) $<
 
-$(PLOTS_HIV)/posterior-qq-plot.pdf : $(SCRIPTS_HIV)/14-posterior-qq-compare.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds $(RDS_HIV)/full-model-fit.rds
+$(PLOTS_HIV)/posterior-qq-plot.pdf : $(SCRIPTS_HIV)/14-posterior-qq-compare.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds $(RDS_HIV)/stage-two-reference-samples.rds
 	$(RSCRIPT) $<
