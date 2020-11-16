@@ -27,7 +27,10 @@ PARS_HIV = $(RDS_HIV)/pars-of-interest.rds
 ALL_PLOTS = $(PLOTS_HIV)/prior-post-compare.pdf \
 	$(PLOTS_HIV)/posterior-qq-plot.pdf \
 	$(PLOTS_HIV)/p12-prior-post-compare.pdf \
-  $(PLOTS_HIV)/p12-only-melding-dists.pdf 
+  $(PLOTS_HIV)/p12-only-melding-dists.pdf \
+  $(PLOTS_HIV)/ratio-estimates-full.pdf \
+  $(PLOTS_HIV)/ratio-estimates-zoomed.pdf \
+  $(PLOTS_HIV)/contributing-wf.pdf
 
 all : $(WRITEUP) 
 
@@ -43,7 +46,7 @@ $(PARS_HIV) : $(DATA_HIV)
 $(RDS_HIV)/full-model-fit.rds : $(SCRIPTS_HIV)/02-full-model.R $(DATA_HIV) $(STAN_FILES)/hiv-ev-sythn.stan $(PARS_HIV)
 	$(RSCRIPT) $<
 
-$(RDS_HIV)/prior-samples.rds : $(SCRIPTS_HIV)/03-sample-prior.R $(DATA_HIV) $(STAN_FILES)/hiv-ev-sythn-prior.stan $(PARS_HIV)
+$(RDS_HIV)/prior-samples.rds : $(SCRIPTS_HIV)/03-sample-prior.R $(DA(STATA_HIV) $N_FILES)/hiv-ev-sythn-prior.stan $(PARS_HIV)
 	$(RSCRIPT) $<
 
 $(RDS_HIV)/reference-prior-samples.rds : $(RDS_HIV)/prior-samples.rds
@@ -84,4 +87,15 @@ $(RDS_HIV)/stage-two-wsre-samples.rds : $(SCRIPTS_HIV)/13-stage-two-melded-poste
 	$(RSCRIPT) $<
 
 $(PLOTS_HIV)/posterior-qq-plot.pdf : $(SCRIPTS_HIV)/14-posterior-qq-compare.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds $(RDS_HIV)/stage-two-reference-samples.rds
+	$(RSCRIPT) $<
+
+$(RDS_HIV)/ratio-estimates-df.rds : $(SCRIPTS_HIV)/15-visualise-ratio-estimates.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-reference-samples.rds $(RDS_HIV)/big-sub-prior-wsre-est.rds $(RDS_HIV)/prior-samples.rds
+	$(RSCRIPT) $<
+
+$(PLOTS_HIV)/ratio-estimates-full.pdf : $(SCRIPTS_HIV)/15-2-plot-ratio-estimates.R $(RDS_HIV)/ratio-estimates-df.rds $(RDS_HIV)/big-sub-prior-wsre-est.rds $(RDS_HIV)/stage-two-reference-samples.rds $(RDS_HIV)/prior-samples.rds
+	$(RSCRIPT) $<
+
+$(PLOTS_HIV)/ratio-estimates-zoomed.pdf	: $(PLOTS_HIV)/ratio-estimates-full.pdf
+
+$(PLOTS_HIV)/contributing-wf.pdf : $(SCRIPTS_HIV)/17-contribution-estimates.R $(RDS_HIV)/big-sub-prior-wsre-est.rds
 	$(RSCRIPT) $<

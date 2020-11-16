@@ -107,14 +107,44 @@ We can also compare the effect of our methodology by considering the quantiles o
 Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the self-density estimate has moved the entire distribution towards the joint quantiles, which we consider to be the baseline truth.
 
 
-```{r p12_all_melding_dists, fig.cap = "Boxplots of all distributions considered in the Markov melding process. From top to bottom: submodel prior distributions (blue), subposterior distributions (green), stage one target distributions with \\& without our self-density ratio estimation methodology (purple), corresponding melded posterior distributions (orange), and reference joint posterior distribution (red)."}
+```{r p12_all_melding_dists, fig.cap = "Boxplots of all distributions considered in the Markov melding process. From top to bottom: submodel prior distributions (blue), subposterior distributions (green), stage one target distributions with \\& without our self-density ratio estimation methodology (purple), corresponding melded posterior distributions (orange), and reference melded posterior distribution (red)."}
 knitr::include_graphics("plots/hiv-example/p12-only-melding-dists.pdf")
 ```
 
-```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, dots) and without (Naive, crosses). The comparison is made to the quantiles obtained by sampling the joint model directly."}
+```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, dots) and without (Naive, crosses). The comparison is made to the quantiles obtained from the reference samples (which uses a parameteric Beta density approximation from 100,00 data points)."}
 knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
 ```
 
+\newpage
+
+## Visualising the ratio estimates
+
+- may be some quantity was stale / had not been updated, but the QQ plot looks a lot better now? (see Figure \ref{fig:qq_plot_phi})?
+    - Given that the makefile dependencies look correct, this tends to suggest the estimate is unstable? We should run the whole process for both things a lot of times, and get some uncertainty intervals for the QQ plot?
+- distance seems to be driving the uncertainty / poor performance visible in figure \ref{fig:ratio_estimates_full}, which we can infer from the proportions plot in Figure&nbsp;\ref{fig:which_est}.
+    - Suggests that telescoping may be a good idea
+        - particularly if we can get it down to one ratio estimate per telescoping ratio
+        - can take the telescoping term centers to be the empirical means of weighted target samples
+- the influence of the unweighted estimate is visible in the proportion plots 
+    - the unweighted estimate is in black, and because it has not been multiplied by a weighting function, it has higher variance and hence a larger bandwidth. 
+    - Larger bandwidth means slower tail decay, hence it alone influences the estimate when the numerator and denominator are far apart.
+
+```{r ratio_estimates_full, fig.cap = "overall ratio estimate"}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-full.pdf")
+```
+
+<!-- ```{r ratio_estimates_zoomed}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-zoomed.pdf")
+```
+
+## which ratio estimate is contributing at what point
+ -->
+
+\begin{landscape}
+```{r which_est, fig.cap = "proportions plot of the weighting functions."}
+knitr::include_graphics("plots/hiv-example/contributing-wf.pdf")
+```
+\end{landscape}
 
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
 \newpage

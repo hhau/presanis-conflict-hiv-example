@@ -6,11 +6,11 @@ pre_wsre_fit <- stan_model("scripts/stan-files/hiv-ev-sythn-prior-wsre.stan")
 
 wsre_est <- wsre(
   stanmodel = pre_wsre_fit,
-  wf_mean = array(c(wf_mean = seq(from = 0.01, to = 0.99, length.out = 10))),
-  wf_pars = list(wf_sd = array(c(wf_sd = 0.25)), wf_exponent = 1, target_dimension = 1),
+  wf_mean = array(c(wf_mean = seq(from = 0.05, to = 0.85, length.out = 12))),
+  wf_pars = list(wf_sd = array(c(wf_sd = 0.0666667)), wf_exponent = 1, target_dimension = 1),
   flog_threshold = futile.logger::TRACE,
   stan_control_params = list(adapt_delta = 0.999, max_treedepth = 14),
-  n_mcmc_samples = 250
+  n_mcmc_samples = 3000 / 12
 )
 
 # some_values <- seq(from = 0, to = 1, length.out = 100)

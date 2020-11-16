@@ -15,7 +15,7 @@ reference_samples <- readRDS(
   file = "rds/hiv-example/stage-two-reference-samples.rds"
 )
 
-quantiles_of_interest <- seq(from = 0.005, to = 0.995, by = 0.005)
+quantiles_of_interest <- seq(from = 0.01, to = 0.99, by = 0.01)
 
 wsre_quantiles <- quantile(
   x = as.vector(wsre_samples$phi_samples),
@@ -41,19 +41,30 @@ plot_tbl <- tibble(
   ), ordered = TRUE)
 )
 
-p1 <- ggplot(plot_tbl, aes(x = x, y = y, pch = grp)) +
-  geom_point(alpha = 1) +
+p1 <- ggplot(plot_tbl, aes(x = x, y = y, shape = grp, col = grp)) +
+  geom_point(alpha = 0.85, size = rel(1.25)) +
   geom_abline(slope = 1, intercept = 0) +
   labs(
     col = "Approach"
   ) +
   xlab("Reference quantiles") +
   ylab("Melded model quantiles") +
-  scale_discrete_manual(
-    aesthetics = "pch",
+  scale_shape_manual(
+    name = "Method",
     values = c(
-      "B_WSRE" = 1,
-      "A_No-WSRE" = 3
+      "B_WSRE" = 19,
+      "A_No-WSRE" = 4
+    ) ,
+    labels = c(
+      "B_WSRE" = "WSRE",
+      "A_No-WSRE" = "Naive"
+    )
+  ) +
+  scale_colour_manual(
+    name = "Method",
+    values = c(
+      "B_WSRE" = blues[2],
+      "A_No-WSRE" = highlight_col
     ) ,
     labels = c(
       "B_WSRE" = "WSRE",
@@ -61,13 +72,15 @@ p1 <- ggplot(plot_tbl, aes(x = x, y = y, pch = grp)) +
     )
   ) +
   scale_x_continuous(
-    limits = c(0.15, 0.45)
+    limits = c(0.15, 0.4)
   ) +
   scale_y_continuous(
-    limits = c(0.15, 0.45)
+    limits = c(0.15, 0.4)
   ) +
   coord_fixed() +
-  labs(pch = "Method")
+  guides(pch = guide_legend(reverse = TRUE), col = guide_legend(reverse = TRUE))
+
+p1
 
 ggsave(
   filename = "plots/hiv-example/posterior-qq-plot.pdf",
