@@ -42,6 +42,10 @@ log_logarithmic_pooled_prior_with_wsre <- function(phi_nu, phi_de) {
   0.5 * log(evaluate(big_model_wsre, phi_nu, phi_de))
 }
 
+log_logarithmic_pooled_prior_with_wsre_tele <- function(phi_nu, phi_de) {
+  0.5 * log(evaluate_telescope_fixed_dist(big_model_wsre, phi_nu, phi_de))
+}
+
 log_logarithmic_pooled_prior_beta_approx <- function(phi_nu, phi_de) {
   0.5 * (
     log_big_p12_prior_marginal_beta_approx(phi_nu) -

@@ -7,6 +7,10 @@ wsre_samples <- readRDS(
   file = "rds/hiv-example/stage-two-wsre-samples.rds"
 )
 
+wsre_tele_samples <- readRDS(
+  file = "rds/hiv-example/stage-two-wsre-tele-samples.rds"
+)
+
 no_wsre_samples <- readRDS(
   file = "rds/hiv-example/stage-two-samples.rds"
 )
@@ -22,6 +26,11 @@ wsre_quantiles <- quantile(
   probs = quantiles_of_interest
 )
 
+wsre_tele_quantiles <- quantile(
+  x = as.vector(wsre_tele_samples$phi_samples),
+  probs = quantiles_of_interest
+)
+
 no_wsre_quantiles <- quantile(
   x = as.vector(no_wsre_samples$phi_samples),
   probs = quantiles_of_interest
@@ -33,54 +42,102 @@ reference_quantiles <- quantile(
 )
 
 plot_tbl <- tibble(
-  x = rep(reference_quantiles, times = 2),
-  y = c(wsre_quantiles, no_wsre_quantiles),
+  x = rep(reference_quantiles, times = 3),
+  y = c(wsre_tele_quantiles, wsre_quantiles, no_wsre_quantiles),
   grp = factor(c(
+    rep("C_WSRE_TELE", times = length(quantiles_of_interest)),
     rep("B_WSRE", times = length(quantiles_of_interest)),
     rep("A_No-WSRE", times = length(quantiles_of_interest))
   ), ordered = TRUE)
 )
 
-p1 <- ggplot(plot_tbl, aes(x = x, y = y, shape = grp, col = grp)) +
-  geom_point(alpha = 0.85, size = rel(1.25)) +
+# line version
+p1 <- ggplot(plot_tbl, aes(x = x, y = y, col = grp)) +
+  geom_line(alpha = 0.75, size = rel(0.5)) +
   geom_abline(slope = 1, intercept = 0) +
   labs(
     col = "Approach"
   ) +
   xlab("Reference quantiles") +
   ylab("Melded model quantiles") +
-  scale_shape_manual(
-    name = "Method",
-    values = c(
-      "B_WSRE" = 19,
-      "A_No-WSRE" = 4
-    ) ,
-    labels = c(
-      "B_WSRE" = "WSRE",
-      "A_No-WSRE" = "Naive"
-    )
-  ) +
+  # scale_shape_manual(
+  #   name = "Method",
+  #   values = c(
+  #     "C_WSRE_TELE" = 15,
+  #     "B_WSRE" = 19,
+  #     "A_No-WSRE" = 4
+  #   ) ,
+  #   labels = c(
+  #     "C_WSRE_TELE" = "WSRE (Telescoping)",
+  #     "B_WSRE" = "WSRE",
+  #     "A_No-WSRE" = "Naive"
+  #   )
+  # ) +
   scale_colour_manual(
     name = "Method",
     values = c(
+      "C_WSRE_TELE" = blues[1],
       "B_WSRE" = blues[2],
       "A_No-WSRE" = highlight_col
     ) ,
     labels = c(
+      "C_WSRE_TELE" = "WSRE (Telescoping)",
       "B_WSRE" = "WSRE",
       "A_No-WSRE" = "Naive"
     )
   ) +
-  scale_x_continuous(
-    limits = c(0.15, 0.4)
-  ) +
-  scale_y_continuous(
-    limits = c(0.15, 0.4)
-  ) +
+  # scale_x_continuous(
+  #   limits = c(0.15, 0.4)
+  # ) +
+  # scale_y_continuous(
+  #   limits = c(0.15, 0.4)
+  # ) +
   coord_fixed() +
   guides(pch = guide_legend(reverse = TRUE), col = guide_legend(reverse = TRUE))
 
-p1
+# point version
+# p1 <- ggplot(plot_tbl, aes(x = x, y = y, shape = grp, col = grp)) +
+#   geom_point(alpha = 0.85, size = rel(1.25)) +
+#   geom_abline(slope = 1, intercept = 0) +
+#   labs(
+#     col = "Approach"
+#   ) +
+#   xlab("Reference quantiles") +
+#   ylab("Melded model quantiles") +
+#   scale_shape_manual(
+#     name = "Method",
+#     values = c(
+#       "C_WSRE_TELE" = 15,
+#       "B_WSRE" = 19,
+#       "A_No-WSRE" = 4
+#     ) ,
+#     labels = c(
+#       "C_WSRE_TELE" = "WSRE (Telescoping)",
+#       "B_WSRE" = "WSRE",
+#       "A_No-WSRE" = "Naive"
+#     )
+#   ) +
+#   scale_colour_manual(
+#     name = "Method",
+#     values = c(
+#       "C_WSRE_TELE" = blues[1],
+#       "B_WSRE" = blues[2],
+#       "A_No-WSRE" = highlight_col
+#     ) ,
+#     labels = c(
+#       "C_WSRE_TELE" = "WSRE (Telescoping)",
+#       "B_WSRE" = "WSRE",
+#       "A_No-WSRE" = "Naive"
+#     )
+#   ) +
+#   scale_x_continuous(
+#     limits = c(0.15, 0.4)
+#   ) +
+#   scale_y_continuous(
+#     limits = c(0.15, 0.4)
+#   ) +
+#   coord_fixed() +
+#   guides(pch = guide_legend(reverse = TRUE), col = guide_legend(reverse = TRUE))
 
 ggsave(
   filename = "plots/hiv-example/posterior-qq-plot.pdf",
@@ -89,20 +146,3 @@ ggsave(
   height = 10.5,
   units = 'cm'
 )
-
-# # ks.testing
-# ks.test(
-#   x = as.numeric(wsre_samples$phi_samples),
-#   y = as.numeric(reference_samples)
-# )
-# 
-# ks.test(
-#   x = as.numeric(no_wsre_samples$phi_samples),
-#   y = as.numeric(reference_samples)
-# )
-# 
-# ks.test(
-#   x = as.numeric(no_wsre_samples$phi_samples),
-#   y = as.numeric(wsre_samples$phi_samples)
-# )
-

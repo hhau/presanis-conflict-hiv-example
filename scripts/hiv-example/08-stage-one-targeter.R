@@ -24,8 +24,8 @@ stan_data <- list(
 model_fit <- sampling(
   prefit,
   data = stan_data,
-  cores = 5,
-  chains = 5,
+  cores = 6,
+  chains = 24,
   iter = 2000,
   warmup = 1000,
   control = list(adapt_delta = 0.9, max_treedepth = 12)

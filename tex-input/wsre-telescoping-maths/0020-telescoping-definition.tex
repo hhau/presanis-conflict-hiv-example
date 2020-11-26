@@ -1,0 +1,17 @@
+\begin{align}
+  \pdrhwsre_{\text{tele}}(\phinu, \phide) &= 
+    \frac {\pd(\phinu)} {\pd(z_{1})}
+    \frac {\pd(z_{1})} {\pd(z_{2})}
+    \ldots
+    \frac {\pd(z_{D})} {\pd(\phide)} \\
+    &= 
+    \frac {\pd(\phinu)} {\pd(z_{1})}
+    \prod_{d = 1}^{D - 1}
+     \left( \frac {\pd(z_{d})} {\pd(z_{d + 1})} \right)
+    \frac {\pd(z_{D})} {\pd(\phide)} \\
+    &= 
+    \pdrhwsre(\phinu, z_{1})
+    \prod_{d = 1}^{D - 1}
+    \pdrhwsre(z_{d}, z_{d + 1})
+    \pdrhwsre(z_{D}, \phide) \label{eqn:telescoping-definition-3}
+\end{align}

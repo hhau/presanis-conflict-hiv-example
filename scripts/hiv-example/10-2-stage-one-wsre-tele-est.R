@@ -1,4 +1,5 @@
 source("scripts/common/plot-settings.R")
+source("scripts/hiv-example/18-telescoping-tests.R")
 
 library(wsre)
 library(rstan)
@@ -56,6 +57,7 @@ prop_sigma <- c(
   ww = 0.125
 )
 
+
 # (try mclapply? I know this occasionally has issues stan):
 res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
   # set up containers
@@ -68,8 +70,8 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
     par_names
   )
   
-  log_file_name <- paste0("logs/" , Sys.Date(), "-stage-one-wsre.log")
-  flog.appender(appender.file(log_file_name), "wsre-logger")
+  log_file_name <- paste0("logs/" , Sys.Date(), "-stage-one-wsre-tele.log")
+  flog.appender(appender.file(log_file_name), "wsre-tele-logger")
 
   # initialise
   res_array[1, 1, ] <- c(
@@ -83,7 +85,9 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
     hh = rlogitnorm(n = 1, mu = logit(0.5), sigma = 0.25),
     ww = rlogitnorm(n = 1, mu = logit(0.125), sigma = 0.125)
   )
-
+  
+  n_tele_terms_vec <- array(NA, dim = c(n_iter - 1))
+  
   # loop
   for (ii in 2 : (n_iter)) {
     # Propose all the base parameters from the logitnormal rw kinda thing
@@ -148,8 +152,8 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
       p12_curr <<- (db + ww * e1ab) / (db + e1ab)
     })
 
-    log_wsre_term <- log(evaluate(
-      wsre_obj = wsre_est,
+    log_wsre_term <- log(evaluate_telescope_fixed_dist(
+      wsre_est,
       x_nu = p12_curr,
       x_de = p12_prop 
     ))
@@ -170,7 +174,7 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
     if (ii %% 1000 == 0) {
       flog.info(
         sprintf("Chain: %d, Iteration: %d", chain_id, ii),
-        name = "wsre-logger"
+        name = "wsre-tele-logger"
       )
     }
   }
@@ -181,13 +185,21 @@ mcmc_samples <- abind::abind(res_list, along = 2)
 mcmc_samples <- mcmc_samples[thin_vec, , ]
 p1 <- bayesplot::mcmc_trace(mcmc_samples)
 
-
 saveRDS(
   object = mcmc_samples,
-  file = "rds/hiv-example/stage-one-wsre-samples.rds"
+  file = "rds/hiv-example/stage-one-wsre-tele-samples.rds"
 )
 
 ggsave_fullwidth(
-  "plots/hiv-example/chain-check.pdf",
+  "plots/hiv-example/chain-check-tele.pdf",
   p1
 )
+
+# plot_df <- table(n_tele_terms_vec) %>% as.data.frame()
+# p1 <- ggplot(plot_df, aes(x = n_tele_terms_vec, y = Freq)) +
+#   geom_col()
+# 
+# ggsave_halfheight(
+#   filename = "plots/hiv-example/n_tele_terms_stage_one.pdf",
+#   plot = p1
+# )

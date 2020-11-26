@@ -11,6 +11,8 @@ reference_samples <- readRDS(file = "rds/hiv-example/stage-two-reference-samples
 big_submodel_sample <- readRDS(file = "rds/hiv-example/big-submodel-samples.rds")
 small_submodel_sample <- readRDS(file = "rds/hiv-example/small-submodel-samples.rds")
 
+tele_samples <- readRDS(file = "rds/hiv-example/stage-two-wsre-tele-samples.rds")$phi_samples
+
 # stage one here is targeting the big submodel with the 
 # prior on phi marginalised out
 stage_one_samples <- readRDS(file = "rds/hiv-example/stage-one-samples.rds")
@@ -86,6 +88,10 @@ bp_wsre_stage_two <- bayesplot::mcmc_intervals(
   wsre_stage_two_p12_samples
 )
 
+bp_tele_stage_two <- bayesplot::mcmc_intervals(
+  tele_samples
+)
+
 prior_data <- bp_prior$data
 subpost_data <- bp_subpost$data
 small_subpost_data <- bp_small_subpost$data
@@ -94,17 +100,20 @@ stage_one_data <- bp_stage_one$data
 wsre_stage_one_data <- bp_wsre_stage_one$data
 stage_two_data <- bp_stage_two$data
 wsre_stage_two_data <- bp_wsre_stage_two$data
+tele_stage_two_data <- bp_tele_stage_two$data
 
 prior_data$dtype <- "h_prior"
 subpost_data$dtype <- "g_subpost"
-small_subpost_data$dtype = "f_subpost"
+small_subpost_data$dtype <- "f_subpost"
 wsre_stage_one_data$dtype <- "e_wsre_stage_one_target"
 stage_one_data$dtype <- "d_stage_one_target"
 wsre_stage_two_data$dtype <- "c_wsre_stage_two_target"
+tele_stage_two_data$dtype <- "cc_tele_stage_two_target"
 stage_two_data$dtype <- "b_stage_two_target"
 post_data$dtype <- "a_post"
 
 post_data$parameter <- "p[12]"
+tele_stage_two_data$parameter <- "p[12]"
 
 full_data <- dplyr::bind_rows(
   prior_data,
@@ -114,7 +123,8 @@ full_data <- dplyr::bind_rows(
   stage_one_data,
   wsre_stage_one_data,
   stage_two_data,
-  wsre_stage_two_data
+  wsre_stage_two_data,
+  tele_stage_two_data
 )
 
 full_data <- tidyr::complete(full_data, dtype, parameter)
@@ -140,6 +150,7 @@ prepend_values <- sapply(
     res <- paste0('italic(', str, ')')
   }
 ) 
+
 full_data$parameter <- full_data$parameter %>% 
   recode(!!!prepend_values) %>% 
   as.factor()
@@ -184,6 +195,7 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
       e_wsre_stage_one_target = purples[2],
       d_stage_one_target = purples[4],
       c_wsre_stage_two_target = oranges[2],
+      cc_tele_stage_two_target = oranges[1],
       b_stage_two_target = oranges[4],
       a_post = highlight_col
     ),
@@ -194,6 +206,7 @@ p1 <- ggplot(full_data, aes(x = parameter, group = interaction(parameter, dtype)
       e_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
       d_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
       c_wsre_stage_two_target = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      cc_tele_stage_two_target = expression(hat("p'")["meld, tele"](phi~"|"~"Y"[1],~"Y"[2])),
       b_stage_two_target = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
       a_post = expression("p"(phi~"|"~"Y"))
     ),
@@ -229,6 +242,7 @@ p2 <- ggplot(sub_data, aes(x = parameter, group = interaction(parameter, dtype),
       e_wsre_stage_one_target = purples[2],
       d_stage_one_target = purples[4],
       c_wsre_stage_two_target = oranges[2],
+      cc_tele_stage_two_target = oranges[1],
       b_stage_two_target = oranges[4],
       a_post = highlight_col
     ),
@@ -239,6 +253,7 @@ p2 <- ggplot(sub_data, aes(x = parameter, group = interaction(parameter, dtype),
       e_wsre_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p'")[2](phi)),
       d_stage_one_target = expression("p"[2](phi~"|"~"Y"[2])~"/"~hat("p")[2](phi)),
       c_wsre_stage_two_target = expression(hat("p'")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+      cc_tele_stage_two_target = expression(hat("p'")["meld, tele"](phi~"|"~"Y"[1],~"Y"[2])),
       b_stage_two_target = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
       a_post = expression("p"(phi~"|"~"Y"))
     ),
@@ -297,19 +312,21 @@ x_axis_data <- tibble(
   ), 
   x_val = c(
     0,  # a_post
-    2,  # b_stage_two_target
+    3,  # b_stage_two_target
     1,  # c_wsre_stage_two_target
-    5,  # d_stage_one_target
-    4,  # e_wsre_stage_one_target
-    7,  # f_subpost
-    8,  # g_subpost
-    11, # h_prior
-    10  # hh_prior
+    2,  # cc_tele_stage_two_target
+    6,  # d_stage_one_target
+    5,  # e_wsre_stage_one_target
+    8,  # f_subpost
+    9,  # g_subpost
+    12, # h_prior
+    11  # hh_prior
   ),
   fill = c(
     highlight_col, # a_post
     oranges[3], # b_stage_two_target
     oranges[1], # c_wsre_stage_two_target
+    whw_pal_16[1], # cc_tele_stage_two_target
     purples[3], # d_stage_one_target
     purples[1], # e_wsre_stage_one_target
     greens[3], # f_subpost
@@ -341,14 +358,15 @@ p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
     limits = p12_only_data$x_val,
     labels = rev(
       c(
-        "10" = expression("p"[2](phi)),
-        "11" = expression("p"[1](phi)),
-        "8" = expression("p"[1](phi~"|"~"Y"[1])),
-        "7" = expression("p"[2](phi~"|"~"Y"[2])),
-        "4" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat(hat("p"))[1](phi)),
-        "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
+        "11" = expression("p"[2](phi)),
+        "12" = expression("p"[1](phi)),
+        "9" = expression("p"[1](phi~"|"~"Y"[1])),
+        "8" = expression("p"[2](phi~"|"~"Y"[2])),
+        "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat(hat("p"))[1](phi)),
+        "6" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
+        "3" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
+        "2" = expression(hat(hat("p"))["meld, tele"](phi~"|"~"Y"[1],~"Y"[2])),
         "1" = expression(hat(hat("p"))["meld"](phi~"|"~"Y"[1],~"Y"[2])),
-        "2" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
         "0" = expression(hat("p")["ref"](phi~"|"~"Y"[1],~"Y"[2]))
       )
     )

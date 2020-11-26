@@ -115,6 +115,8 @@ knitr::include_graphics("plots/hiv-example/p12-only-melding-dists.pdf")
 knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
 ```
 
+- \textcolor{blue}{for $\geq 3000$ samples in the KDE in the naive method, the stage one MCMC sampler is unstable}.
+
 \newpage
 
 ## Visualising the ratio estimates
@@ -128,10 +130,19 @@ knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
 - the influence of the unweighted estimate is visible in the proportion plots 
     - the unweighted estimate is in black, and because it has not been multiplied by a weighting function, it has higher variance and hence a larger bandwidth. 
     - Larger bandwidth means slower tail decay, hence it alone influences the estimate when the numerator and denominator are far apart.
+- _Tue 17 Nov 18:12:56 2020_: The telescoping version of wsre doesn't seem any worse? We mostly make local moves anyway?
 
+\begin{landscape}
 ```{r ratio_estimates_full, fig.cap = "overall ratio estimate"}
 knitr::include_graphics("plots/hiv-example/ratio-estimates-full.pdf")
 ```
+\end{landscape}
+
+\begin{landscape}
+```{r ratio_estimates_full_inverse, fig.cap = "overall ratio estimate, inverted arguments"}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-full-inverse.pdf")
+```
+\end{landscape}
 
 <!-- ```{r ratio_estimates_zoomed}
 knitr::include_graphics("plots/hiv-example/ratio-estimates-zoomed.pdf")
@@ -139,12 +150,140 @@ knitr::include_graphics("plots/hiv-example/ratio-estimates-zoomed.pdf")
 
 ## which ratio estimate is contributing at what point
  -->
+\newpage
 
 \begin{landscape}
-```{r which_est, fig.cap = "proportions plot of the weighting functions."}
+```{r which_est, fig.cap = "proportions plot of the weighting functions. this plot is \\textit{relatively} stable over iterations."}
 knitr::include_graphics("plots/hiv-example/contributing-wf.pdf")
 ```
 \end{landscape}
+
+<!-- ## Inter run variance
+
+- There is a lot of inter-run / inter-estimate variance, in both the naive and KDE estimates.
+- For example, Figure&nbsp;\ref{fig:v_45_wednesday} is the QQ plot we looked at on early Friday afternoon.
+
+```{r v_45_wednesday, fig.cap = "the run we looked at on Friday early afternoon"}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v45-wednesday.pdf")
+```
+
+- Whilst Figure&nbsp;\ref{fig:v_46_late_fri} is a run from later than day, which shows us doing much better. (`Make` only re-ran the `WSRE` arm, as that was all that was updated)
+
+```{r v_46_late_fri, fig.cap = "a run I unintentionally did late on Friday night (in the process of making the proportions plot."}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v46.pdf")
+```
+
+- And then there are another two runs I did this morning, in one the naive estimate is not on the plot:
+
+```{r v_47_and_48, fig.cap = "Monday Morning runs"}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v47.pdf")
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v48.pdf")
+```
+
+- reason why quantiles for the naive estimate are not on this plot:
+
+```{r, fig.cap = "naive numerical instability, first plot is the stage one trace, one chain gets stuck. second plot is the stage two trace, and the extremely behaviour we expect to see is displayed."}
+knitr::include_graphics("plots/hiv-example/stage-one-naive-bad-trace.png")
+knitr::include_graphics("plots/hiv-example/stage-two-naive-bad-trace.png")
+```
+
+- given how some of these are not great for both methods
+    - We should probably run this ~500 times for 80% intervals for the QQ plots (needs HPC / code restructure / this is about 300 HPC compute hours -- end to end on my laptop is ~30mins)
+    - telescoping possibly a good idea, thinking about how to do it
+
+
+\newpage -->
+
+## Telescoping
+
+- have programmed, no idea if correct, many edge cases
+- ~~**many many times faster (30 mins vs 10 seconds)**~~
+    - This had more to do with a poor use of parallelism, it is ~5x faster on average though (particularly for stage 1/2)
+
+### Mathematics
+
+- this builds off the notation used in section 3.3.
+- interest is in accurately evaluating $\pdrh(\phinu, \phide)$ for improbable values of $\phinu$ and/or $\phide$.
+- we have $\Nw$ sets of samples/ratio estimates indexed by $\wfindex \in \mathcal{W} = \{1, \ldots, \Nw\}$, each of size $\Nx$, denoted $\{\phi_{\sampleindex, \wfindex}\}_{\sampleindex = 1}^{\Nx}$.
+- Assume that $\phinu < \phide$ 
+    - (If this is not true, swap $\phinu$ and $\phide$ and invert the result)
+- Compute $\bar{\boldsymbol{\phi}} = (\bar{\phi}_{1}, \ldots, \bar{\phi}_{\Nw})$ where $\bar{\phi}_{\wfindex} = \frac{1}{\Nx}\sum_{\sampleindex = 1}^{\Nx}\phi_{\sampleindex, \wfindex}$
+- Form the set $\mathcal{A} = \left\{w \in \mathcal{W} \mid \phinu < \bar{\phi}_{\wfindex} < \phide \right\}$.
+    - if $\vert \mathcal{A} \vert = 0$
+        - find $\wfindex^{*}$ s. t. $\min\limits_{\wfindex^{*} \in \mathcal{W}} \lVert \frac{\phinu + \phide}{2} - \bar{\phi}_{\wfindex} \rVert_{2}$
+        - return $\pdrhwsre_{\wfindex^{*}}(\phinu, \phide)$
+    - if $\vert \mathcal{A} \vert = 1$, 
+        - then $\mathcal{A}$ contains exactly 1 value, $\wfindex^{*}$.
+        - return $\pdrhwsre_{\wfindex^{*}}(\phinu, \phide)$
+- Now if $\vert \mathcal{A} \vert > 1$, then for each $\wfindex \in \mathcal{A}$ compute $q_{l, \wfindex}$ and $q_{u, \wfindex}$ satisfying, for a given $\alpha$ 
+\input{tex-input/wsre-telescoping-maths/0010-telescoping-quantiles.tex}
+and form $\mathcal{B} = \{(q_{l, \wfindex}, q_{u, \wfindex})\}_{\wfindex \in \mathcal{A}}$ (_these are the quantiles of the weighted targets $\s_{\wfindex}(\phi)$_).
+- define $\wfindex_{(1)} = \min(\mathcal{A})$ and $\wfindex_{(k)} = \max(\mathcal{A})$ 
+- if $q_{l, \wfindex_{(1)}} < \phinu$ then define $\mathcal{C} = \mathcal{B} \setminus q_{l, \wfindex_{(1)}}$, otherwise $\mathcal{C} = \mathcal{B}$.
+- if $q_{u, \wfindex_{(k)}} > \phide$ then define $\mathcal{D} = \mathcal{C} \setminus q_{u, \wfindex_{(k)}}$, otherwise $\mathcal{D} = \mathcal{C}$. In all cases $\vert \mathcal{D} \vert > 2$. Points in $\mathcal{D}$ are somewhat sorted, depending on the choice of $\alpha$ and how much the weighted targets overlap.
+- Let us now index $\mathcal{D}$ by $d$, such that $z_{d} \in \mathcal{D}, d = 1, \ldots, \vert \mathcal{D} \vert$, and define $D = \vert \mathcal{D} \vert$.
+- We define the telescoping product as 
+\input{tex-input/wsre-telescoping-maths/0020-telescoping-definition.tex}
+- For each of the $D + 1$ terms in Equation \eqref{eqn:telescoping-definition-3} we can choose which $\wfindex \in \mathcal{A}$ to use to evaluate that specific term/ratio
+    - for $\pdrhwsre(\phinu, z_{1})$ use $\wfindex_{(1)} \rightarrow \pdrhwsre_{\wfindex_{(1)}}(\phinu, z_{1})$ and for $\pdrhwsre(z_{D}, \phide)$ use $\wfindex_{(k)} \rightarrow \pdrhwsre_{\wfindex_{(k)}}(z_{D}, \phide)$.
+    - for all other terms, $(z_{d}, z_{d + 1}) = (q_{\kappa, \wfindex}, q_{\kappa, \wfindex'})$ where $\kappa = l, u$, noting that $(q_{\kappa, \wfindex}, q_{\kappa, \wfindex'})$ will be distinct elements of $\mathcal{D}$
+        - if $\wfindex = \wfindex'$, then evaluate $\pdrhwsre_{\wfindex}(z_{d}, z_{d + 1})$
+        - if $\wfindex \neq \wfindex'$, then evaluate using the weighted average in Equation \eqref{eqn:tele-weighted-avg-def}:
+
+\input{tex-input/wsre-telescoping-maths/0030-tele-weighted-avg-def.tex}
+
+### Output
+
+```{r tele_wsre_compare, fig.cap = "stage one wsre samples, evaluated using the weighted average or the telescoping method. reference samples also depicted. difference in \\texttt{dd} is most concerning."}
+knitr::include_graphics("plots/hiv-example/tele-vs-avg.pdf")
+```
+
+- how many terms are included in the telescoping product? Barplots from single run of single chain, for both stages (stage one in Figure \ref{fig:tele_terms_stage_one}, stage two in Figure \ref{fig:tele_terms_stage_two}).
+
+```{r tele_terms_stage_one, fig.cap = "Barplots of the number of terms in the telescoping product in stage one"}
+knitr::include_graphics("plots/hiv-example/n_tele_terms_stage_one.pdf")
+```
+
+```{r tele_terms_stage_two, fig.cap = "Barplots of the number of terms in the telescoping product in stage two"}
+knitr::include_graphics("plots/hiv-example/n-tele-terms-stage-two.pdf")
+```
+
+- if we take the reference ratio to be the truth (or very close to the truth) we can compare the distribution of the squared errors for different sets of $\xnu, \xde$.
+- Say we randomly sample $\xnu, \xde$ independently from three distributions:
+    - $\text{Unif}(0, 1)$
+    - The stage one reference samples for $\phi$
+    - The stage two reference samples for $\phi$
+- for each random sample of $\xnu = \phi, \xde = \phi'$, where the $\phi$ are drawn randomly as above, we evaluate each ratio estimate type (Naive, WSRE weighted average, WSRE telescoping) and compute the squared error $(\pdrhwsre(\xnu, \xde) - \pdrh_{\text{ref}}(\xnu, \xde))^{2}$.
+- Figure \ref{fig:sq_error_all} contains such distributions.
+    - When uniformly sampling evaluation points, 
+        - the weighted average is the worst (it has many enormous errors, that would surely throw off the MH acceptance calculation)
+        - Telescoping is clearly the best
+        - related to the Nakayama "IS can improve local KDE performance at the expense of global performance" idea?
+    - When the evaluation points come from the stage one reference samples
+        - The naive estimate is much worse than either of the WSRE estimates
+        - Telescoping is preferable to the weighted average
+    - When the evaluate points come from the stage two reference samples,
+        - Telescoping does slightly worse than the weighted average, see \ref{fig:sq_error_wsre_stage_two}
+        - this might be why the right tail of Figure&nbsp;\ref{fig:p12_all_melding_dists} and Figure&nbsp;\ref{fig:qq_plot_phi} is worse when using the telescoping evaluation. 
+
+<!-- 
+```{r sq_error_all, fig.cap = "distributions of the squared error for various ratio estimate evaluated under various sampling schemes"}
+knitr::include_graphics("plots/hiv-example/sq-error-distribution.pdf")
+```
+
+```{r sq_error_wsre_stage_two, fig.cap = "squared error distributions for the WSRE methods, with evaluation points sampled from stage two reference samples. The weighted average seems preferable. Vertical lines are the medians."}
+knitr::include_graphics("plots/hiv-example/stage-two-wsre-sq-error-distributions.pdf")
+``` 
+-->
+
+### using $\s_{\wfindex}(\phi)$ to choose parameters?
+
+- looking now to Figure \ref{fig:sdens_all}
+
+```{r sdens_all, fig.cap = "all $\\s_{\\wfindex}(\\phi)$ and there analytic-ish counterparts."}
+knitr::include_graphics("plots/hiv-example/sdens-kde-analytic-compare.pdf")
+```
+
 
 <!-- -------------------- END OF MAIN BODY OF DOCUMENT -------------------- -->
 \newpage
