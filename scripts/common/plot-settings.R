@@ -1,12 +1,23 @@
 library(ggplot2)
+library(bayesplot)
+library(wesanderson)
 
 # Theme settings
 theme_set(theme_classic())
 theme_replace(
   panel.grid.major = element_line(),
   panel.grid.minor = element_line(linetype = "dashed", size = rel(2/3)),
-  legend.text = element_text(size = rel(1.25)),
-  legend.title = element_text(size = rel(1.25))
+  legend.text = element_text(size = rel(1.0)),
+  legend.title = element_text(size = rel(1.0)),
+  strip.background = element_rect(fill = "#dee1e0")
+)
+
+bayesplot_theme_set(theme_classic())
+bayesplot_theme_replace(
+  panel.grid.major = element_line(),
+  panel.grid.minor = element_line(linetype = "dashed", size = rel(2/3)),
+  legend.text = element_text(size = rel(1.1)),
+  legend.title = element_text(size = rel(1.1))
 )
 
 # Colours - should all be darkest[1] to lightest[n] 
@@ -24,7 +35,27 @@ greens <- c(
 )
 
 ## Burgundy(ish) red highlight
-highlight_col <- wesanderson::wes_palette("FantasticFox1")[5]
+highlight_col <- wes_palette("FantasticFox1")[5]
+
+## WHW colour gradient - 16 colours
+whw_pal_16 <- c(
+  "#eab27e",
+  "#f0ac84",
+  "#f4a78c",
+  "#f6a395",
+  "#f59f9f",
+  "#f19da9",
+  "#ec9cb4",
+  "#e49cbd",
+  "#da9cc6",
+  "#ce9ecd",
+  "#c1a0d3",
+  "#b2a2d7",
+  "#a3a4d8",
+  "#93a5d8",
+  "#85a7d6",
+  "#77a8d2"
+)
 
 # ggplot saving settings - @mbertolacci
 display_settings <- list(
@@ -32,7 +63,7 @@ display_settings <- list(
   full_page_plot_height = 21,
   half_page_plot_width = 7,
   half_page_plot_height = 10,
-  png_plot_dpi = 300,
+  png_plot_dpi = 900,
   highlight_colour = highlight_col
 )
 

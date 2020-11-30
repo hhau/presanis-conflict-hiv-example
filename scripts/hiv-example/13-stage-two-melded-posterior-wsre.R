@@ -30,7 +30,7 @@ dimnames(stage_one_samples) <- old_dimnames
 stage_one_phi_samples <- as.vector(stage_one_samples[, , "p[12]"])
 
 # mcmc setup
-n_mcmc <- 1e3
+n_mcmc <- 1e5
 n_chain <- 5
 
 # stage two log posterior
@@ -92,7 +92,7 @@ mcmc_res <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_index) {
     # calc accept probability,
     log_alpha <- 
       log_posterior(phi_prop, phi_curr) +
-      log_logarithmic_pooled_prior_with_wsre(phi_prop, phi_curr)
+      log_logarithmic_pooled_prior_with_wsre(phi_curr, phi_prop)
 
     # accept/reject
     if (runif(1) < exp(log_alpha)) {
@@ -104,7 +104,7 @@ mcmc_res <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_index) {
     }
 
     # append to log file.
-    if (mcmc_index %% 50 == 0) {
+    if (mcmc_index %% 5000 == 0) {
       flog.info(
         sprintf("Chain: %d, Iteration: %d", chain_index, mcmc_index),
         name = "stage-two-logger"

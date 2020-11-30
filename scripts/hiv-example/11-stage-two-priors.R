@@ -21,8 +21,10 @@ log_big_p12_prior_marginal <- function(x) {
   log(wsre:::kde_func_nd(x, p12_big_model_samples, p12_bw))
 }
 
-log_big_p12_prior_marginal_reference <- function(x) {
-  log(wsre:::kde_func_nd(x, reference_phi_samples, reference_bw))
+log_big_p12_prior_marginal_beta_approx <- function(x) {
+  # magic numbers from MLE using 100,000 samples from the prior
+  # visually gives very good fit.
+  dbeta(x, 3.4520971, 0.8341708, log = TRUE)
 }
 
 # stage two / Small submodel prior marginal (free to choose this)
@@ -47,6 +49,17 @@ log_logarithmic_pooled_prior_reference <- function(phi_nu, phi_de) {
 
 log_logarithmic_pooled_prior_with_wsre <- function(phi_nu, phi_de) {
   0.5 * log(evaluate(big_model_wsre, phi_nu, phi_de))
+}
+
+log_logarithmic_pooled_prior_with_wsre_tele <- function(phi_nu, phi_de) {
+  0.5 * log(evaluate_telescope_fixed_dist(big_model_wsre, phi_nu, phi_de))
+}
+
+log_logarithmic_pooled_prior_beta_approx <- function(phi_nu, phi_de) {
+  0.5 * (
+    log_big_p12_prior_marginal_beta_approx(phi_nu) -
+    log_big_p12_prior_marginal_beta_approx(phi_de)
+  )
 }
 
 # should really LSE this

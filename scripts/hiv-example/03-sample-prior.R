@@ -29,7 +29,7 @@ index_vec <- apply(prior_samples, 1, function(x_mat) {
 
 prior_samples <- prior_samples[index_vec, , , drop = FALSE]
 
-n_prior_samples <- 2500
+n_prior_samples <- 3000
 n_reference_prior_samples <- 1e5
 
 reference_prior_samples <- prior_samples[

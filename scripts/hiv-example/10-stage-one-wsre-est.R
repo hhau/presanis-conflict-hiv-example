@@ -39,9 +39,8 @@ par_names <- c("aa", "bb", "cc", "dd", "ee", "ff", "gg", "hh", "ww")
 n_par <- length(par_names)
 
 # setup stage one containers
-n_iter <- (10000 + 200)
+n_iter <- (100000 + 200)
 n_chain <- 5
-thin_vec <- round(seq(from = 200, to = n_iter, length.out = 1000))
 
 # tuning parameters
 prop_sigma <- c(
@@ -68,7 +67,7 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
     par_names
   )
   
-  log_file_name <- sprintf("logs/mcmc-stage-one-wsre-log.log")
+  log_file_name <- paste0("logs/" , Sys.Date(), "-stage-one-wsre.log")
   flog.appender(appender.file(log_file_name), "wsre-logger")
 
   # initialise
@@ -178,9 +177,7 @@ res_list <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_id) {
 })
 
 mcmc_samples <- abind::abind(res_list, along = 2)
-mcmc_samples <- mcmc_samples[thin_vec, , ]
 p1 <- bayesplot::mcmc_trace(mcmc_samples)
-
 
 saveRDS(
   object = mcmc_samples,

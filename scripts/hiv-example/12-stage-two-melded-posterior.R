@@ -77,7 +77,7 @@ mcmc_res <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_index) {
     # calc accept probability,
     log_alpha <- 
       log_posterior(phi_prop, phi_curr) +
-      log_logarithmic_pooled_prior_no_wsre(phi_prop, phi_curr)
+      log_logarithmic_pooled_prior_no_wsre(phi_curr, phi_prop)
 
     # accept/reject
     if (runif(1) < exp(log_alpha)) {

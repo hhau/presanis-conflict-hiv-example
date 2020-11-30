@@ -1,5 +1,5 @@
 ---
-title: "Anne's HIV example"
+title: "An evidence synthesis for estimating the efficacy of HIV screening"
 author: "Andrew Manderson"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 fontfamily: tgpagella
@@ -22,97 +22,320 @@ output:
 knitr::opts_chunk$set(echo = FALSE, comment = NA, out.width = "85%", fig.align = "center", auto_pdf = TRUE)
 ```
 
-# HIV Conflict model
+To illustrate our approach we artificially split an existing joint model into two submodels, then compare the melded posterior estimates obtained by the multi-stage algorithm using the naive and WSRE approaches. 
+By artificially splitting a joint model we better demonstrate the sensitivity of the multi-stage sampler to inaccuracies in $\widehat{\pd}_{\modelindex}(\phi)$, and the effectiveness of our methodology.
 
-The HIV example of @ades:cliffe:02 and @presanis:etal:13 considers an evidence synthesis model for inferring the efficacy of HIV screening in prenatal clinics.
-The evidence synthesis model has 8 _basic parameters_ $a, b, \ldots, h$ , which are group membership probabilities for certain risk groups and subgroups thereof.
-The first risk group partitions the prenatal clinic attendees into those born in sub-Saharan Africa (SSA), injecting drug users (IDU), and the remaining women, which have corresponding probabilities $a, b$, and  $1 - a - b$.
-Conditional on this response, the populations are then subdivided based on whether they are infected with HIV, which have probabilities $c, d$ and $e$ respectively, and if they have already been diagnosed prior to visiting the clinic, with probabilities $f, g$ and $h$.
-@presanis:etal:13 define _direct evidence_ as a study that pertains directly to one of these basic parameters, and _indirect evidence_ as a study that relates to the basic parameters through a deterministic link function.
-An additional probability is also included in the model, denoted $w$, which considers the prevalence of HIV serotype B.
-This parameter enables the inclusion of an extra study which further informs the other basic parameters.
-Table&nbsp;\ref{tab:HIV-data} summarises the basic parameters, their link functions, and the data used to inform the basic parameters.
-The code to reproduce all the figures in this example is available at https://github.com/hhau/presanis-conflict-hiv-example.
-
-<!-- and Figure&nbsp;\ref{fig:hiv_model_tree} contains the decision tree that segments the prenatal clinic attendee populace into the various risk groups.
- -->
+The model is an evidence synthesis model for inferring the efficacy of HIV screening in prenatal clinics [@ades:cliffe:02], and has 8 _basic parameters_ $\rho_{1}, \rho_{2}, \ldots, \rho_{8}$, which are group membership probabilities for particular risk groups and subgroups thereof. 
+The first risk group partitions the prenatal clinic attendees into those born in sub-Saharan Africa (SSA); injecting drug users (IDU); and the remaining women. 
+These have corresponding probabilities $\rho_{1}, \rho_{2}$, and $1 - \rho_{1} - \rho_{2}$.
+Conditional on this response, the populations are subdivided based on whether they are infected with HIV, which have probabilities $\rho_{3}, \rho_{4}$ and $\rho_{5}$ respectively; and if they had already been diagnosed prior to visiting the clinic, with probabilities $\rho_{6}, \rho_{7}$ and $\rho_{8}$. 
+An additional probability is also included in the model, denoted $\rho_{9}$, which considers the prevalence of HIV serotype B. 
+This parameter enables the inclusion of study 12, which further informs the other basic parameters.
+Table~\ref{tab:HIV-data} summarises the full joint model, including the $s = 1, \ldots, 12$ studies with observations $y_{s}$ and sample size $n_{s}$; the basic parameters $\rho_{1}, \ldots, \rho_{9}$; and the link functions that relate the study proportions $\pi_{1}, \ldots, \pi_{12}$ to the basic parameters.
 
 \input{tex-input/hiv-intro/0020-link-function-table.tex}
 
-## Model particulars
+We make one small modification to original model of @ades:cliffe:02, to better highlight the impact of WSRE on the melded posterior estimate. 
+The original model adopts a flat, Beta$(1, 1)$ prior for $\rho_{9}$. 
+\textcolor{blue}{This induces a prior on $\pi_{12}$ that is not flat, but not overly informative, making it difficult to demonstrate the issues caused by an inaccurate density estimate of the tail of the prior marginal distribution. 
+To more clearly highlight the impact of our methodology, we adopt a Beta$(3, 1)$ prior for $\rho_{9}$.} 
+This prior would have been reasonable for the time and place in which the original evidence synthesis was constructed, since the distribution of HIV serotypes differs considerably between North America and sub-Saharan Africa [@hemelaar:12].
 
-Our particular interest is in study 12, which informs the probability $p_{12}$, and provides indirect evidence for the basic parameters through the deterministic link function
+The code to reproduce this example is available at
+\url{https://github.com/hhau/presanis-conflict-hiv-example}.
+
+\subsection{Splitting the model}
+\label{sec:model-particulars}
+
+In the full joint model study 12 informs the probability $\pi_{12}$, and provides indirect evidence for the basic parameters through the deterministic link function
 \input{tex-input/hiv-intro/0010-study-link-function.tex}
-Figure&nbsp;\ref{fig:model-dag} contains a DAG of the basic parameters that relate to $p_{12}$.
-We consider melding on the node corresponding to $p_{12}$, i.e. $\phi = \{p_{12}\}$.
-The first submodel, consisting of the study data $y_{12}$ and the probability $p_{12}$, is the smaller submodel or submodel $\modelindex = 1$.
-Mathematically,
-\input{tex-input/hiv-submodels/0010-study-12-submodel.tex}
-where we are free to choose $\pd_{1}(\phi)$, and do so in Section&nbsp;\ref{notation-and-submodels}.
-The other submodel considers the remaining studies and the induced prior on $p_{12}$, i.e. not including $y_{12}$ but still including $p_{12}$.
-We refer to this as the large submodel, or submodel $\modelindex = 2$, and define it as
-\input{tex-input/hiv-submodels/0020-big-submodel.tex}
-which implicitly contains $p_{12}$.
-@presanis:etal:13 investigates the effects of performing _node splits_ on the study probabilities as a means of diagnosing conflict between individual studies and the overall model.
-This node splitting process can be reframed as an application of Markov melding.
-The presence of conflict and unknown prior marginal distributions on the nodes of interest indicates that our methodology for more accurately estimating self-density ratios is applicable.
-This example is also useful in its simplicity, as the joint model implied by Markov melding can be fit directly, which serves as a reference for the melded posterior computed via the multi-stage sampler. 
+Figure~\ref{fig:model-dag} is a DAG of the basic parameters in the full model that relate to $\pi_{12}$. 
+We consider splitting the model at the node corresponding to the expected proportion
+$\pi_{12}$ in study 12, i.e.~we set the common quantity
+$\phi = \pi_{12}$.
 
 \input{tex-input/hiv-submodels/0040-model-dag.tex}
 
-## Prior data conflict for $p_{12}$
+The first submodel ($\modelindex = 1$) considers data from studies 1
+to 11 $Y_{2} = (y_{1}, \ldots, y_{11})$, corresponding study
+proportions $(\pi_{1}, \ldots, \pi_{11})$, and all basic parameters
+$\psi_{1} = (\rho_{1}, \ldots, \rho_{9})$. Note that the study
+proportions are are implicitly defined because they are deterministic
+functions of the basic parameters. The joint distribution of this
+submodel is 
+\input{tex-input/hiv-submodels/0020-big-submodel.tex} 
+The prior $\pd_{1}(\pi_{12})$ on the common quantity $\phi = \pi_{12}$
+is implicitly defined, so its analytic form is unknown, hence it needs
+to be estimated.
 
-Initial experiments suggest that there is conflict between the induced prior on $p_{12}$, using the uninformative priors of @ades:cliffe:02, and the subposterior $\pd(p_{12} \mid y_{12})$.
-This is driven by the flat prior on $w$, which causes an accumulation of probability mass near 1 in the prior on $p_{12}$.
-To exacerbate this conflict, we employ a slightly misspecified prior for $w \sim \text{Beta}(3, 1)$.
-We motivate this by considering a reasonable prior for the time and place in which the evidence synthesis was constructed, and noting that the distribution of HIV serotypes differs considerably between North America and sub-Saharan Africa [@hemelaar:12].
-This misspecified prior causes more probability mass to accumulate at the boundary, and the accuracy of the naive KDE estimate $\hat{\pd}_{2}(p_{12})$ to decrease in the region of high posterior probability.
-The accumulation is visible in the second row of Figure&nbsp;\ref{fig:p12_all_melding_dists}, and the prior-subposterior conflict is visible in the 3rd and 4th row of Figure&nbsp;\ref{fig:p12_all_melding_dists}.
+The second submodel ($\modelindex = 2$) pertains specifically to study
+12, with data $Y_{2} = y_{12}$ and the probability
+$\phi = \pi_{12}$; $\psi_{1} = \varnothing$, as there are no
+submodel specific parameters. The joint distribution is
+$\pd_{2}(\pi_{12}, y_{12}) = \pd_{2}(\pi_{12}) \pd(y_{12} \mid \pi_{12}).$
+In more complex examples $\pd_{2}(\phi)$ may be implicitly defined,
+and contribute substantially to the melded posterior. However, in this
+simple example we are free to choose
+$\pd_{2}(\pi_{12}) = \pd_{2}(\phi)$, and opt for a Beta$(1, 1)$
+prior.
 
+\subsection{Simulation setup and results}
+\label{sec:example-details}
 
-## Notation and submodels
-
-Define the full data as the information from all 12 studies $Y = \{y_{1}, \ldots, y_{12}, n_{1}, \ldots, n_{12}\}$.
-We are going to meld on $\phi = p_{12}$, and hence define $Y_{1} = \{y_{12}, n_{12}\}$ and $Y_{2} = \{y_{1}, \ldots, y_{11}, n_{1}, \ldots, n_{11}\}$.
-There is a tacit prior on $\phi$ in the $m = 2$ model, and we get to choose an explicit prior in then $m = 1$ case.
-We opt for a flat $\text{Beta}(1, 1)$ prior on $\phi$ to not distract from the conflict between the subposterior and the induced prior.
-The pooled prior is formed using equally weighted logarithmic pooling, with weights equal to $1 \mathop{/} 2$.
-This permits the use of the weighted-sample self-density ratio estimate in both the stage one and stage two targets, through the prior marginal self-density ratio and the pooled prior respectively.
-
-## Example details
-<!-- 
-Unless otherwise stated, 5000 samples are drawn from each density.
-When MCMC is required, 5 chains are run to convergence, then 1000 samples are drawn from each chain.
- -->
-
-To demonstrate the effectiveness of our self-density ratio estimation methodology, we compare the melded posterior obtained using our method against the melded posterior obtained using the naive KDE estimate for the prior marginal.
-For a fair comparison, we estimate the prior marginal distribution of interest, $\hat{\pd}_{2}(\phi)$, using 2500 Monte Carlo samples, and compare this against the self-density ratio estimate produced using 2500 samples in total.
-The number of weighting functions was specified to be $\Nw = 10$ for the self-density ratio estimate of 
-\input{tex-input/hiv-submodels/0050-self-ratio-estimate.tex}
-Each weighting function has a specific mean $\mu_{\wfindex}$, and all have a common variance $\sigma_{\wfindex}^{2} = 0.25^2$.
-The weighting function means consisted of $\Nw$ evenly spaced values between 0.01 and 0.99, and each weighted target had 250 post warmup MCMC samples drawn from it.
-This set-up is slightly advantageous for the naive KDE method, as it uses Monte Carlo samples, as opposed to the self-density ratio estimate's MCMC samples.
-Hence, the naive KDE makes use of a sample comprised of 2500 effective samples, whilst the self-density ratio estimate uses a sample with fewer than 2500 effective samples.
-
-## Assessing the self-density ratio estimate impact
-
-Figure&nbsp;\ref{fig:p12_all_melding_dists} compares all distributions considered in various stages of the melding process for $\phi = p_{12}$.
-The two purple colours of Figure&nbsp;\ref{fig:p12_all_melding_dists} pertain to stage one samples (of model two) from 
+We compare the melded posterior obtained by the naive approach and using
+WSRE. For a fair comparison, we estimate the prior marginal distribution
+of interest $\widehat{\pd}_{1}(\phi)$ using 3000 Monte Carlo samples,
+and compare this against the self-density ratio estimate 
+$\doublehat{\pdr}_{\Nw}(\phinu, \phide)$ produced using
+3000 samples in total, apportioned equally across $\Nw = 7$ weighting
+functions with equally spaced means $\mu_{\wfindex}$ between 0.05 and
+0.80, and common variance $\sigma_{\wfindex}^{2} = 0.08^2$. We thus
+draw 429 post warmup MCMC samples from each weighted target. \textcolor{blue}{The parameters of 
+the weighting functions are chosen so that HDRs of the weighted targets 
+$\s_{\wfindex}(\phi)$ span the region of interest.} This set-up
+is slightly advantageous for the naive approach, which uses Monte Carlo
+samples, rather than the MCMC samples of the self-density ratio
+estimate; the naive approach makes use of a sample comprised of 3000
+effective samples, whilst the self-density ratio estimate uses fewer
+than 3000 effective samples. \textcolor{blue}{A reference estimate of the melded posterior is 
+obtained using a parametric density estimate $\hat{\pd}_{\text{ref}, 1}(\phi)$ 
+for the unknown prior marginal, based on $1 \times 10^{5}$ prior samples.
+The reference sample also contains some error, as 
+$\hat{\pd}_{\text{ref}, 1}(\phi)$ is not perfect. However, in the absence
+of an analytic form for $\pd_{1}(\phi)$ it serves as a very close approximation.}
+We estimate the melded posterior using the multi-stage sampler of
+Section~\ref{sec:multi-stage-markov-chain-monte-carlo-sampler},
+targeting in stage one
 \input{tex-input/hiv-submodels/0030-stage-one-target.tex}
-Specifically, $\pd_{2}(\phi, \psi_{2}, Y_{2}) \mathop{/} \hat{\pd_{2}'}(\phi)$ corresponds to the stage one target samples drawn using the weighted self-density ratio estimate.
-The difference between the two is not considerable, but the shift to the right in the weighted self-density ratio estimate  implies that the naive KDE had underestimated, in the region of interest, the prior marginal distribution.
-Additionally, more of the right tail is captured, and the estimate of the median is more accurate.
-These differences are also present in the estimated melded posterior distributions $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$ displayed in orange in Figure&nbsp;\ref{fig:p12_all_melding_dists}.
-We can also compare the effect of our methodology by considering the quantiles of the melded posterior distributions obtained with, $\hat{\pd'}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$, and without, $\hat{\pd}_{\text{meld}}(\phi \mid Y_{1}, Y_{2})$, the weighted self-density ratio estimate, and comparing them to the quantiles obtained directly from the joint posterior $\pd(\phi \mid Y)$.
-Figure&nbsp;\ref{fig:qq_plot_phi} contains this comparison, and we see that the self-density estimate has moved the entire distribution towards the joint quantiles, which we consider to be the baseline truth.
+and the full melded posterior in stage two.
+
+\begin{figure}{
+  \centering
+  \includegraphics[width=0.975\linewidth]{plots/hiv-example/stage-one-naive-trace.png}
+}
+\caption{\textcolor{blue}{Stage one trace plot using the naive method. All 24 chains eventually converge to the spurious mode, which is an artefact of $\hat{\pd}_{1}(\phi)$.}}
+\label{fig:stage_one_trace}
+\end{figure}
 
 
-```{r p12_all_melding_dists, fig.cap = "Boxplots of all distributions considered in the Markov melding process. From top to bottom: submodel prior distributions (blue), subposterior distributions (green), stage one target distributions with \\& without our self-density ratio estimation methodology (purple), corresponding melded posterior distributions (orange), and reference joint posterior distribution (red)."}
-knitr::include_graphics("plots/hiv-example/p12-only-melding-dists.pdf")
+\begin{figure}{
+  \centering
+  \includegraphics[width=0.975\linewidth]{plots/hiv-example/posterior-qq-plot} 
+}
+\caption{\textcolor{blue}{Quantile-quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, blue) and without (Naive, red). Both methods are comparable to the quantiles from the reference sample (x-axis and diagonal line).}}
+\label{fig:qq_plot_phi}
+\end{figure}
+
+\textcolor{blue}{
+To demonstrate the numerical instability of interest, we run 24 chains with $2 \times 10^{3}$ warm-up iterations and $2 \times 10^{4}$ post warm-up iteration that target Equation \eqref{eqn:stage_one_target} under the naive approach.
+Figure \ref{fig:stage_one_trace} displays the trace plot of the post-warmup samples.
+Many of the chains have already converged to a spurious model around $\phi \approx 0.02$, and the remaining chains jump to this mode after a highly variable number of additional iterations. 
+This mode is an artefact of the KDE employed for $\hat{\pd}_{1}(\phi)$; samples in the neighbourhood of the spurious mode introduce substantial bias in the final estimate of the melded posterior, which we see in the the quantile-quantile plot in Figure \ref{fig:qq_plot_phi}.
+The stage one target under the WSRE approach does not contain the erroneous mode, and the corresponding melded posterior estimate displays considerably less bias.
+The location of the numerical stability highlights the importance of accurate self-density ratio estimates in regions of low probability.
+}
+
+<!-- \begin{figure}{
+  \centering
+  \includegraphics[width=0.975\linewidth]{plots/hiv-example/p12-only-melding-dists} 
+}
+\caption{Boxplots of all distributions considered in the Markov melding process for the HIV example. From top to bottom: submodel prior distributions (blue), subposterior distributions (green), stage one target distributions using the naive method and our self-density ratio estimation methodology (purple), corresponding melded posterior distributions (orange), and reference melded posterior distribution (red).}
+\label{fig:p12_all_melding_dists}
+\end{figure}
+
+Figure~\ref{fig:p12_all_melding_dists} contains all
+distributions considered in the melding process for $\phi = \pi_{12}$.
+\textcolor{blue}{The top two rows depict the induced prior in submodel one
+$\pd_{1}(\phi)$ (dark blue), and our selected prior under submodel two
+$\pd_{2}(\phi)$ (light blue). The subposterior distributions
+$\pd_{1}(\phi \mid Y_{1})$ and $\pd_{2}(\phi \mid Y_{2})$ are
+displayed in the following two rows (dark and light green respectively),
+and are located in the tail of $\pd_{1}(\phi)$.} --> 
+ 
+<!-- The stage one samples are then used to target the melded posterior defined in 
+Equation \eqref{eqn:melded-joint-2}. The bottom three rows of
+Figure~\ref{fig:p12_all_melding_dists} show the
+estimated melded posterior marginal for $\phi$ obtained using the
+naive approach (light orange) and the WSRE approach (dark orange), and
+our reference estimate (red). 
+\textcolor{blue}{ We see that the WSRE approach is closer in distribution
+to the reference than the naive approach. This is clearer in
+Figure~\ref{fig:qq_plot_phi}, where we compare the
+quantiles of the melded posterior distributions to the quantiles
+obtained from the reference samples. The melded posterior
+quantiles obtained using WSRE are closer to the quantiles
+of the reference samples, i.e.~closer to the diagonal, particularly for smaller
+values of $\phi$.} This example highlights the
+sensitivity of the multi-stage sampler to the estimate of
+$\pd_{1}(\phi)$, and the need for accurate estimates of
+$\pdr(\phinu, \phide)$ for improbable values of $\phinu$ or
+$\phide$.
+ -->
+\newpage
+
+## Visualising the ratio estimates
+
+- may be some quantity was stale / had not been updated, but the QQ plot looks a lot better now? (see Figure \ref{fig:qq_plot_phi})?
+    - Given that the makefile dependencies look correct, this tends to suggest the estimate is unstable? We should run the whole process for both things a lot of times, and get some uncertainty intervals for the QQ plot?
+- distance seems to be driving the uncertainty / poor performance visible in figure \ref{fig:ratio_estimates_full}, which we can infer from the proportions plot in Figure&nbsp;\ref{fig:which_est}.
+    - Suggests that telescoping may be a good idea
+        - particularly if we can get it down to one ratio estimate per telescoping ratio
+        - can take the telescoping term centers to be the empirical means of weighted target samples
+- the influence of the unweighted estimate is visible in the proportion plots 
+    - the unweighted estimate is in black, and because it has not been multiplied by a weighting function, it has higher variance and hence a larger bandwidth. 
+    - Larger bandwidth means slower tail decay, hence it alone influences the estimate when the numerator and denominator are far apart.
+- _Tue 17 Nov 18:12:56 2020_: The telescoping version of wsre doesn't seem any worse? We mostly make local moves anyway?
+
+\begin{landscape}
+```{r ratio_estimates_full, fig.cap = "overall ratio estimate"}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-full.pdf")
+```
+\end{landscape}
+
+\begin{landscape}
+```{r ratio_estimates_full_inverse, fig.cap = "overall ratio estimate, inverted arguments"}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-full-inverse.pdf")
+```
+\end{landscape}
+
+<!-- ```{r ratio_estimates_zoomed}
+knitr::include_graphics("plots/hiv-example/ratio-estimates-zoomed.pdf")
 ```
 
-```{r qq_plot_phi, fig.cap = "Quantile-Quantile plot of the melded posterior quantiles with the weighted self-density ratio estimate  (WSRE, dots) and without (Naive, crosses). The comparison is made to the quantiles obtained by sampling the joint model directly."}
-knitr::include_graphics("plots/hiv-example/posterior-qq-plot.pdf")
+## which ratio estimate is contributing at what point
+ -->
+\newpage
+
+\begin{landscape}
+```{r which_est, fig.cap = "proportions plot of the weighting functions. this plot is \\textit{relatively} stable over iterations."}
+knitr::include_graphics("plots/hiv-example/contributing-wf.pdf")
+```
+\end{landscape}
+
+<!-- ## Inter run variance
+
+- There is a lot of inter-run / inter-estimate variance, in both the naive and KDE estimates.
+- For example, Figure&nbsp;\ref{fig:v_45_wednesday} is the QQ plot we looked at on early Friday afternoon.
+
+```{r v_45_wednesday, fig.cap = "the run we looked at on Friday early afternoon"}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v45-wednesday.pdf")
+```
+
+- Whilst Figure&nbsp;\ref{fig:v_46_late_fri} is a run from later than day, which shows us doing much better. (`Make` only re-ran the `WSRE` arm, as that was all that was updated)
+
+```{r v_46_late_fri, fig.cap = "a run I unintentionally did late on Friday night (in the process of making the proportions plot."}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v46.pdf")
+```
+
+- And then there are another two runs I did this morning, in one the naive estimate is not on the plot:
+
+```{r v_47_and_48, fig.cap = "Monday Morning runs"}
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v47.pdf")
+knitr::include_graphics("plots/hiv-example/posterior-qq-plot-v48.pdf")
+```
+
+- reason why quantiles for the naive estimate are not on this plot:
+
+```{r, fig.cap = "naive numerical instability, first plot is the stage one trace, one chain gets stuck. second plot is the stage two trace, and the extremely behaviour we expect to see is displayed."}
+knitr::include_graphics("plots/hiv-example/stage-one-naive-bad-trace.png")
+knitr::include_graphics("plots/hiv-example/stage-two-naive-bad-trace.png")
+```
+
+- given how some of these are not great for both methods
+    - We should probably run this ~500 times for 80% intervals for the QQ plots (needs HPC / code restructure / this is about 300 HPC compute hours -- end to end on my laptop is ~30mins)
+    - telescoping possibly a good idea, thinking about how to do it
+
+
+\newpage -->
+
+## Telescoping
+
+- have programmed, no idea if correct, many edge cases
+- ~~**many many times faster (30 mins vs 10 seconds)**~~
+    - This had more to do with a poor use of parallelism, it is ~5x faster on average though (particularly for stage 1/2)
+
+### Mathematics
+
+- this builds off the notation used in section 3.3.
+- interest is in accurately evaluating $\pdrh(\phinu, \phide)$ for improbable values of $\phinu$ and/or $\phide$.
+- we have $\Nw$ sets of samples/ratio estimates indexed by $\wfindex \in \mathcal{W} = \{1, \ldots, \Nw\}$, each of size $\Nx$, denoted $\{\phi_{\sampleindex, \wfindex}\}_{\sampleindex = 1}^{\Nx}$.
+- Assume that $\phinu < \phide$ 
+    - (If this is not true, swap $\phinu$ and $\phide$ and invert the result)
+- Compute $\bar{\boldsymbol{\phi}} = (\bar{\phi}_{1}, \ldots, \bar{\phi}_{\Nw})$ where $\bar{\phi}_{\wfindex} = \frac{1}{\Nx}\sum_{\sampleindex = 1}^{\Nx}\phi_{\sampleindex, \wfindex}$
+- Form the set $\mathcal{A} = \left\{w \in \mathcal{W} \mid \phinu < \bar{\phi}_{\wfindex} < \phide \right\}$.
+    - if $\vert \mathcal{A} \vert = 0$
+        - find $\wfindex^{*}$ s. t. $\min\limits_{\wfindex^{*} \in \mathcal{W}} \lVert \frac{\phinu + \phide}{2} - \bar{\phi}_{\wfindex} \rVert_{2}$
+        - return $\pdrhwsre_{\wfindex^{*}}(\phinu, \phide)$
+    - if $\vert \mathcal{A} \vert = 1$, 
+        - then $\mathcal{A}$ contains exactly 1 value, $\wfindex^{*}$.
+        - return $\pdrhwsre_{\wfindex^{*}}(\phinu, \phide)$
+- Now if $\vert \mathcal{A} \vert > 1$, then for each $\wfindex \in \mathcal{A}$ compute $q_{l, \wfindex}$ and $q_{u, \wfindex}$ satisfying, for a given $\alpha$ 
+\input{tex-input/wsre-telescoping-maths/0010-telescoping-quantiles.tex}
+and form $\mathcal{B} = \{(q_{l, \wfindex}, q_{u, \wfindex})\}_{\wfindex \in \mathcal{A}}$ (_these are the quantiles of the weighted targets $\s_{\wfindex}(\phi)$_).
+- define $\wfindex_{(1)} = \min(\mathcal{A})$ and $\wfindex_{(k)} = \max(\mathcal{A})$ 
+- if $q_{l, \wfindex_{(1)}} < \phinu$ then define $\mathcal{C} = \mathcal{B} \setminus q_{l, \wfindex_{(1)}}$, otherwise $\mathcal{C} = \mathcal{B}$.
+- if $q_{u, \wfindex_{(k)}} > \phide$ then define $\mathcal{D} = \mathcal{C} \setminus q_{u, \wfindex_{(k)}}$, otherwise $\mathcal{D} = \mathcal{C}$. In all cases $\vert \mathcal{D} \vert > 2$. Points in $\mathcal{D}$ are somewhat sorted, depending on the choice of $\alpha$ and how much the weighted targets overlap.
+- Let us now index $\mathcal{D}$ by $d$, such that $z_{d} \in \mathcal{D}, d = 1, \ldots, \vert \mathcal{D} \vert$, and define $D = \vert \mathcal{D} \vert$.
+- We define the telescoping product as 
+\input{tex-input/wsre-telescoping-maths/0020-telescoping-definition.tex}
+- For each of the $D + 1$ terms in Equation \eqref{eqn:telescoping-definition-3} we can choose which $\wfindex \in \mathcal{A}$ to use to evaluate that specific term/ratio
+    - for $\pdrhwsre(\phinu, z_{1})$ use $\wfindex_{(1)} \rightarrow \pdrhwsre_{\wfindex_{(1)}}(\phinu, z_{1})$ and for $\pdrhwsre(z_{D}, \phide)$ use $\wfindex_{(k)} \rightarrow \pdrhwsre_{\wfindex_{(k)}}(z_{D}, \phide)$.
+    - for all other terms, $(z_{d}, z_{d + 1}) = (q_{\kappa, \wfindex}, q_{\kappa, \wfindex'})$ where $\kappa = l, u$, noting that $(q_{\kappa, \wfindex}, q_{\kappa, \wfindex'})$ will be distinct elements of $\mathcal{D}$
+        - if $\wfindex = \wfindex'$, then evaluate $\pdrhwsre_{\wfindex}(z_{d}, z_{d + 1})$
+        - if $\wfindex \neq \wfindex'$, then evaluate using the weighted average in Equation \eqref{eqn:tele-weighted-avg-def}:
+
+\input{tex-input/wsre-telescoping-maths/0030-tele-weighted-avg-def.tex}
+
+### Output
+
+```{r tele_wsre_compare, fig.cap = "stage one wsre samples, evaluated using the weighted average or the telescoping method. reference samples also depicted. difference in \\texttt{dd} is most concerning."}
+knitr::include_graphics("plots/hiv-example/tele-vs-avg.pdf")
+```
+
+- how many terms are included in the telescoping product? Barplots from single run of single chain, for both stages (stage one in Figure \ref{fig:tele_terms_stage_one}, stage two in Figure \ref{fig:tele_terms_stage_two}).
+
+```{r tele_terms_stage_one, fig.cap = "Barplots of the number of terms in the telescoping product in stage one"}
+knitr::include_graphics("plots/hiv-example/n_tele_terms_stage_one.pdf")
+```
+
+```{r tele_terms_stage_two, fig.cap = "Barplots of the number of terms in the telescoping product in stage two"}
+knitr::include_graphics("plots/hiv-example/n-tele-terms-stage-two.pdf")
+```
+
+- if we take the reference ratio to be the truth (or very close to the truth) we can compare the distribution of the squared errors for different sets of $\xnu, \xde$.
+- Say we randomly sample $\xnu, \xde$ independently from three distributions:
+    - $\text{Unif}(0, 1)$
+    - The stage one reference samples for $\phi$
+    - The stage two reference samples for $\phi$
+- for each random sample of $\xnu = \phi, \xde = \phi'$, where the $\phi$ are drawn randomly as above, we evaluate each ratio estimate type (Naive, WSRE weighted average, WSRE telescoping) and compute the squared error $(\pdrhwsre(\xnu, \xde) - \pdrh_{\text{ref}}(\xnu, \xde))^{2}$.
+- Figure \ref{fig:sq_error_all} contains such distributions.
+    - When uniformly sampling evaluation points, 
+        - the weighted average is the worst (it has many enormous errors, that would surely throw off the MH acceptance calculation)
+        - Telescoping is clearly the best
+        - related to the Nakayama "IS can improve local KDE performance at the expense of global performance" idea?
+    - When the evaluation points come from the stage one reference samples
+        - The naive estimate is much worse than either of the WSRE estimates
+        - Telescoping is preferable to the weighted average
+    - When the evaluate points come from the stage two reference samples,
+        - Telescoping does slightly worse than the weighted average, see \ref{fig:sq_error_wsre_stage_two}
+        - this might be why the right tail of Figure&nbsp;\ref{fig:p12_all_melding_dists} and Figure&nbsp;\ref{fig:qq_plot_phi} is worse when using the telescoping evaluation. 
+
+<!-- 
+```{r sq_error_all, fig.cap = "distributions of the squared error for various ratio estimate evaluated under various sampling schemes"}
+knitr::include_graphics("plots/hiv-example/sq-error-distribution.pdf")
+```
+
+```{r sq_error_wsre_stage_two, fig.cap = "squared error distributions for the WSRE methods, with evaluation points sampled from stage two reference samples. The weighted average seems preferable. Vertical lines are the medians."}
+knitr::include_graphics("plots/hiv-example/stage-two-wsre-sq-error-distributions.pdf")
+``` 
+-->
+
+### using $\s_{\wfindex}(\phi)$ to choose parameters?
+
+- looking now to Figure \ref{fig:sdens_all}
+
+```{r sdens_all, fig.cap = "all $\\s_{\\wfindex}(\\phi)$ and there analytic-ish counterparts."}
+knitr::include_graphics("plots/hiv-example/sdens-kde-analytic-compare.pdf")
 ```
 
 
