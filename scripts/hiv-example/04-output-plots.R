@@ -100,7 +100,7 @@ stage_one_data <- bp_stage_one$data
 wsre_stage_one_data <- bp_wsre_stage_one$data
 stage_two_data <- bp_stage_two$data
 wsre_stage_two_data <- bp_wsre_stage_two$data
-tele_stage_two_data <- bp_tele_stage_two$data
+# tele_stage_two_data <- bp_tele_stage_two$data
 
 prior_data$dtype <- "h_prior"
 subpost_data$dtype <- "g_subpost"
@@ -108,12 +108,12 @@ small_subpost_data$dtype <- "f_subpost"
 wsre_stage_one_data$dtype <- "e_wsre_stage_one_target"
 stage_one_data$dtype <- "d_stage_one_target"
 wsre_stage_two_data$dtype <- "c_wsre_stage_two_target"
-tele_stage_two_data$dtype <- "cc_tele_stage_two_target"
+# tele_stage_two_data$dtype <- "cc_tele_stage_two_target"
 stage_two_data$dtype <- "b_stage_two_target"
 post_data$dtype <- "a_post"
 
 post_data$parameter <- "p[12]"
-tele_stage_two_data$parameter <- "p[12]"
+# tele_stage_two_data$parameter <- "p[12]"
 
 full_data <- dplyr::bind_rows(
   prior_data,
@@ -123,8 +123,8 @@ full_data <- dplyr::bind_rows(
   stage_one_data,
   wsre_stage_one_data,
   stage_two_data,
-  wsre_stage_two_data,
-  tele_stage_two_data
+  wsre_stage_two_data#,
+  #tele_stage_two_data
 )
 
 full_data <- tidyr::complete(full_data, dtype, parameter)
@@ -312,21 +312,19 @@ x_axis_data <- tibble(
   ), 
   x_val = c(
     0,  # a_post
-    3,  # b_stage_two_target
+    2,  # b_stage_two_target
     1,  # c_wsre_stage_two_target
-    2,  # cc_tele_stage_two_target
-    6,  # d_stage_one_target
-    5,  # e_wsre_stage_one_target
-    8,  # f_subpost
-    9,  # g_subpost
-    12, # h_prior
-    11  # hh_prior
+    5,  # d_stage_one_target
+    4,  # e_wsre_stage_one_target
+    7,  # f_subpost
+    8,  # g_subpost
+    11, # h_prior
+    10  # hh_prior
   ),
   fill = c(
     highlight_col, # a_post
     oranges[3], # b_stage_two_target
     oranges[1], # c_wsre_stage_two_target
-    whw_pal_16[1], # cc_tele_stage_two_target
     purples[3], # d_stage_one_target
     purples[1], # e_wsre_stage_one_target
     greens[3], # f_subpost
@@ -358,14 +356,13 @@ p3 <- ggplot(p12_only_data, aes(x = x_val, group = dtype)) +
     limits = p12_only_data$x_val,
     labels = rev(
       c(
-        "11" = expression("p"[2](phi)),
-        "12" = expression("p"[1](phi)),
-        "9" = expression("p"[1](phi~"|"~"Y"[1])),
-        "8" = expression("p"[2](phi~"|"~"Y"[2])),
-        "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat(hat("p"))[1](phi)),
-        "6" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
-        "3" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
-        "2" = expression(hat(hat("p"))["meld, tele"](phi~"|"~"Y"[1],~"Y"[2])),
+        "10" = expression("p"[2](phi)),
+        "11" = expression("p"[1](phi)),
+        "8" = expression("p"[1](phi~"|"~"Y"[1])),
+        "7" = expression("p"[2](phi~"|"~"Y"[2])),
+        "4" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat(hat("p"))[1](phi)),
+        "5" = expression("p"[1](phi~"|"~"Y"[1])~"/"~hat("p")[1](phi)),
+        "2" = expression(hat("p")["meld"](phi~"|"~"Y"[1],~"Y"[2])),
         "1" = expression(hat(hat("p"))["meld"](phi~"|"~"Y"[1],~"Y"[2])),
         "0" = expression(hat("p")["ref"](phi~"|"~"Y"[1],~"Y"[2]))
       )

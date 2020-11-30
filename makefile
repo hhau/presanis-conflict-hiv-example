@@ -34,7 +34,8 @@ ALL_PLOTS = $(PLOTS_HIV)/prior-post-compare.pdf \
   $(PLOTS_HIV)/tele-vs-avg.pdf \
   $(PLOTS_HIV)/sdens-kde-all.pdf \
   $(PLOTS_HIV)/sdens-kde-analytic-compare.pdf \
-  $(PLOTS_HIV)/stage-one-naive-trace.png
+  $(PLOTS_HIV)/stage-one-naive-trace.png \
+  $(PLOTS_HIV)/stage-one-trace-and-posterior-qq-plot.png
 #   $(PLOTS_HIV)/sq-error-distribution.pdf \
 
 all : $(WRITEUP) 
@@ -102,6 +103,8 @@ $(RDS_HIV)/stage-two-wsre-tele-samples.rds : $(SCRIPTS_HIV)/13-2-stage-two-melde
 
 $(PLOTS_HIV)/posterior-qq-plot.pdf : $(SCRIPTS_HIV)/14-posterior-qq-compare.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-samples.rds $(RDS_HIV)/stage-two-wsre-samples.rds $(RDS_HIV)/stage-two-reference-samples.rds $(RDS_HIV)/stage-two-wsre-tele-samples.rds
 	$(RSCRIPT) $<
+
+$(PLOTS_HIV)/stage-one-trace-and-posterior-qq-plot.png : $(PLOTS_HIV)/posterior-qq-plot.pdf
 
 $(RDS_HIV)/ratio-estimates-df.rds : $(SCRIPTS_HIV)/15-visualise-ratio-estimates.R $(PLOT_SETTINGS) $(RDS_HIV)/stage-two-reference-samples.rds $(RDS_HIV)/big-sub-prior-wsre-est.rds $(RDS_HIV)/prior-samples.rds $(SCRIPTS_HIV)/18-telescoping-tests.R
 	$(RSCRIPT) $<

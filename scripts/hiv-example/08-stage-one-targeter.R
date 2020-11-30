@@ -26,8 +26,8 @@ model_fit <- sampling(
   data = stan_data,
   cores = 6,
   chains = 24,
-  iter = 2000,
-  warmup = 1000,
+  iter = 20000,
+  warmup = 2000,
   control = list(adapt_delta = 0.9, max_treedepth = 12)
 )
 

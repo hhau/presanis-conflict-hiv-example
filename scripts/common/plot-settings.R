@@ -7,8 +7,8 @@ theme_set(theme_classic())
 theme_replace(
   panel.grid.major = element_line(),
   panel.grid.minor = element_line(linetype = "dashed", size = rel(2/3)),
-  legend.text = element_text(size = rel(1.1)),
-  legend.title = element_text(size = rel(1.1)),
+  legend.text = element_text(size = rel(1.0)),
+  legend.title = element_text(size = rel(1.0)),
   strip.background = element_rect(fill = "#dee1e0")
 )
 
@@ -63,7 +63,7 @@ display_settings <- list(
   full_page_plot_height = 21,
   half_page_plot_width = 7,
   half_page_plot_height = 10,
-  png_plot_dpi = 300,
+  png_plot_dpi = 900,
   highlight_colour = highlight_col
 )
 

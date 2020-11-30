@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.11.2)  24 NOV 2020 18:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.11.26)  30 NOV 2020 14:14
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -357,9 +357,9 @@ y
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.
 code.tex (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revi
 sion.tex)
-Package: pgfrcs 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgfrcs 2020/11/23 v3.1.7 (3.1.7)
 ))
-Package: pgf 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgf 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.
 sty
@@ -367,7 +367,7 @@ sty
 sty
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsy
 s.code.tex
-Package: pgfsys 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgfsys 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys
 .code.tex
@@ -401,31 +401,31 @@ filtered.code.tex
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.c
 fg
-File: pgf.cfg 2020/10/01 v3.1.6a (3.1.6a)
+File: pgf.cfg 2020/11/23 v3.1.7 (3.1.7)
 )
 Driver file for pgf: pgfsys-pdftex.def
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsy
 s-pdftex.def
-File: pgfsys-pdftex.def 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfsys-pdftex.def 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsy
 s-common-pdf.def
-File: pgfsys-common-pdf.def 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfsys-common-pdf.def 2020/11/23 v3.1.7 (3.1.7)
 )))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsy
 ssoftpath.code.tex
-File: pgfsyssoftpath.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfsyssoftpath.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfsyssoftpath@smallbuffer@items=\count283
 \pgfsyssoftpath@bigbuffer@items=\count284
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsy
 sprotocol.code.tex
-File: pgfsysprotocol.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfsysprotocol.code.tex 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 e.code.tex
-Package: pgfcore 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgfcore 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code
 .tex
@@ -468,7 +468,7 @@ ions.integerarithmetics.code.tex)))
 tex)
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 epoints.code.tex
-File: pgfcorepoints.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorepoints.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@picminx=\dimen179
 \pgf@picmaxx=\dimen180
 \pgf@picminy=\dimen181
@@ -486,19 +486,19 @@ File: pgfcorepoints.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 epathconstruct.code.tex
-File: pgfcorepathconstruct.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorepathconstruct.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@path@lastx=\dimen193
 \pgf@path@lasty=\dimen194
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 epathusage.code.tex
-File: pgfcorepathusage.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorepathusage.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@shorten@end@additional=\dimen195
 \pgf@shorten@start@additional=\dimen196
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 escopes.code.tex
-File: pgfcorescopes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorescopes.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfpic=\box54
 \pgf@hbox=\box55
 \pgf@layerbox@main=\box56
@@ -506,83 +506,83 @@ File: pgfcorescopes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 egraphicstate.code.tex
-File: pgfcoregraphicstate.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoregraphicstate.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgflinewidth=\dimen197
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 etransformations.code.tex
-File: pgfcoretransformations.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoretransformations.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@pt@x=\dimen198
 \pgf@pt@y=\dimen199
 \pgf@pt@temp=\dimen256
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 equick.code.tex
-File: pgfcorequick.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorequick.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 eobjects.code.tex
-File: pgfcoreobjects.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoreobjects.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 epathprocessing.code.tex
-File: pgfcorepathprocessing.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorepathprocessing.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 earrows.code.tex
-File: pgfcorearrows.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorearrows.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfarrowsep=\dimen257
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 eshade.code.tex
-File: pgfcoreshade.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoreshade.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@max=\dimen258
 \pgf@sys@shading@range@num=\count288
 \pgf@shadingcount=\count289
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 eimage.code.tex
-File: pgfcoreimage.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoreimage.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 eexternal.code.tex
-File: pgfcoreexternal.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoreexternal.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfexternal@startupbox=\box57
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 elayers.code.tex
-File: pgfcorelayers.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorelayers.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 etransparency.code.tex
-File: pgfcoretransparency.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcoretransparency.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 epatterns.code.tex
-File: pgfcorepatterns.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorepatterns.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcor
 erdf.code.tex
-File: pgfcorerdf.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfcorerdf.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodule
 shapes.code.tex
-File: pgfmoduleshapes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfmoduleshapes.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfnodeparttextbox=\box58
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodule
 plot.code.tex
-File: pgfmoduleplot.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfmoduleplot.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfco
 mp-version-0-65.sty
-Package: pgfcomp-version-0-65 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgfcomp-version-0-65 2020/11/23 v3.1.7 (3.1.7)
 \pgf@nodesepstart=\dimen259
 \pgf@nodesepend=\dimen260
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfco
 mp-version-1-18.sty
-Package: pgfcomp-version-1-18 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgfcomp-version-1-18 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.st
 y
@@ -595,7 +595,7 @@ fmath.sty
 .tex))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.
 code.tex
-Package: pgffor 2020/10/01 v3.1.6a (3.1.6a)
+Package: pgffor 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code
 .tex)
@@ -606,11 +606,11 @@ Package: pgffor 2020/10/01 v3.1.6a (3.1.6a)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/tikz.code.tex
-Package: tikz 2020/10/01 v3.1.6a (3.1.6a)
+Package: tikz 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibr
 aryplothandlers.code.tex
-File: pgflibraryplothandlers.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryplothandlers.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@plot@mark@count=\count290
 \pgfplotmarksize=\dimen263
 )
@@ -633,7 +633,7 @@ File: pgflibraryplothandlers.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodule
 matrix.code.tex
-File: pgfmodulematrix.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgfmodulematrix.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfmatrixcurrentrow=\count295
 \pgfmatrixcurrentcolumn=\count296
 \pgf@matrix@numberofcolumns=\count297
@@ -642,47 +642,47 @@ File: pgfmodulematrix.code.tex 2020/10/01 v3.1.6a (3.1.6a)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarytopaths.code.tex
-File: tikzlibrarytopaths.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibrarytopaths.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarypositioning.code.tex
-File: tikzlibrarypositioning.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibrarypositioning.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.code.tex
-File: tikzlibraryshapes.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.geometric.code.tex
-File: tikzlibraryshapes.geometric.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.geometric.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/shapes/
 pgflibraryshapes.geometric.code.tex
-File: pgflibraryshapes.geometric.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryshapes.geometric.code.tex 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.misc.code.tex
-File: tikzlibraryshapes.misc.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.misc.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/shapes/
 pgflibraryshapes.misc.code.tex
-File: pgflibraryshapes.misc.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryshapes.misc.code.tex 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.symbols.code.tex
-File: tikzlibraryshapes.symbols.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.symbols.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/shapes/
 pgflibraryshapes.symbols.code.tex
-File: pgflibraryshapes.symbols.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryshapes.symbols.code.tex 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.arrows.code.tex
-File: tikzlibraryshapes.arrows.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.arrows.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/shapes/
 pgflibraryshapes.arrows.code.tex
-File: pgflibraryshapes.arrows.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryshapes.arrows.code.tex 2020/11/23 v3.1.7 (3.1.7)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.callouts.code.tex
@@ -690,11 +690,11 @@ z/libraries/tikzlibraryshapes.callouts.code.tex
 pgflibraryshapes.callouts.code.tex))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryshapes.multipart.code.tex
-File: tikzlibraryshapes.multipart.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryshapes.multipart.code.tex 2020/11/23 v3.1.7 (3.1.7)
 
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/libraries/shapes/
 pgflibraryshapes.multipart.code.tex
-File: pgflibraryshapes.multipart.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: pgflibraryshapes.multipart.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgfnodepartlowerbox=\box63
 \pgfnodeparttwobox=\box64
 \pgfnodepartthreebox=\box65
@@ -726,17 +726,17 @@ aryfpu.code.tex)
 ))
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarythrough.code.tex
-File: tikzlibrarythrough.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibrarythrough.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarybackgrounds.code.tex
-File: tikzlibrarybackgrounds.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibrarybackgrounds.code.tex 2020/11/23 v3.1.7 (3.1.7)
 \pgf@layerbox@background=\box83
 \pgf@layerboxsaved@background=\box84
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibraryfit.code.tex
-File: tikzlibraryfit.code.tex 2020/10/01 v3.1.6a (3.1.6a)
+File: tikzlibraryfit.code.tex 2020/11/23 v3.1.7 (3.1.7)
 )
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tik
 z/libraries/tikzlibrarydecorations.pathmorphing.code.tex
@@ -968,53 +968,55 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 ) (./tex-input/hiv-intro/0020-link-function-table.tex) (./tex-input/hiv-intro/0
-010-study-link-function.tex) (./tex-input/hiv-submodels/0010-study-12-submodel.
-tex) (./tex-input/hiv-submodels/0020-big-submodel.tex) [1
+010-study-link-function.tex) (./tex-input/hiv-submodels/0040-model-dag.tex [1
 
 {/Users/amanderson/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-}] (./tex-input/hiv-submodels/0040-model-dag.tex) [2] (./tex-input/hiv-submodel
-s/0050-self-ratio-estimate.tex) (./tex-input/hiv-submodels/0030-stage-one-targe
-t.tex) [3]
-<plots/hiv-example/p12-only-melding-dists.pdf, id=62, 460.72125pt x 284.06125pt
->
-File: plots/hiv-example/p12-only-melding-dists.pdf Graphic file (type pdf)
-<use plots/hiv-example/p12-only-melding-dists.pdf>
-Package pdftex.def Info: plots/hiv-example/p12-only-melding-dists.pdf  used on 
-input line 303.
-(pdftex.def)             Requested size: 399.05269pt x 246.039pt.
-<plots/hiv-example/posterior-qq-plot.pdf, id=63, 355.3275pt x 298.11375pt>
+}]) (./tex-input/hiv-submodels/0020-big-submodel.tex) [2]
+
+LaTeX Warning: Reference `sec:multi-stage-markov-chain-monte-carlo-sampler' on 
+page 3 undefined on input line 258.
+
+(./tex-input/hiv-submodels/0030-stage-one-target.tex)
+<plots/hiv-example/stage-one-naive-trace.png, id=34, 3199.955pt x 2489.3pt>
+File: plots/hiv-example/stage-one-naive-trace.png Graphic file (type png)
+<use plots/hiv-example/stage-one-naive-trace.png>
+Package pdftex.def Info: plots/hiv-example/stage-one-naive-trace.png  used on i
+nput line 265.
+(pdftex.def)             Requested size: 457.70729pt x 356.05836pt.
+<plots/hiv-example/posterior-qq-plot.pdf, id=36, 255.95625pt x 214.8025pt>
 File: plots/hiv-example/posterior-qq-plot.pdf Graphic file (type pdf)
 <use plots/hiv-example/posterior-qq-plot.pdf>
 Package pdftex.def Info: plots/hiv-example/posterior-qq-plot.pdf  used on input
- line 312.
-(pdftex.def)             Requested size: 355.3483pt x 298.13121pt.
-LaTeX Font Info:    Trying to load font information for TS1+qpl on input line 3
-22.
+ line 273.
+(pdftex.def)             Requested size: 255.9595pt x 214.80524pt.
+[3] [4 <./plots/hiv-example/stage-one-naive-trace.png> <./plots/hiv-example/pos
+terior-qq-plot.pdf>]
+LaTeX Font Info:    Trying to load font information for TS1+qpl on input line 2
+97.
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/tex-gyre/ts1qpl.fd
 File: ts1qpl.fd 2009/09/25 v1.2 font definition file for TS1/qpl
-) [4 <./plots/hiv-example/p12-only-melding-dists.pdf>] [5 <./plots/hiv-example/
-posterior-qq-plot.pdf>]
-<plots/hiv-example/ratio-estimates-full.pdf, id=95, 597.23125pt x 426.59375pt>
+) [5]
+<plots/hiv-example/ratio-estimates-full.pdf, id=74, 597.23125pt x 426.59375pt>
 File: plots/hiv-example/ratio-estimates-full.pdf Graphic file (type pdf)
 <use plots/hiv-example/ratio-estimates-full.pdf>
 Package pdftex.def Info: plots/hiv-example/ratio-estimates-full.pdf  used on in
-put line 387.
+put line 350.
 (pdftex.def)             Requested size: 597.26622pt x 426.61873pt.
 [6 <./plots/hiv-example/ratio-estimates-full.pdf>]
-<plots/hiv-example/ratio-estimates-full-inverse.pdf, id=109, 597.23125pt x 426.
-59375pt>
+<plots/hiv-example/ratio-estimates-full-inverse.pdf, id=88, 597.23125pt x 426.5
+9375pt>
 File: plots/hiv-example/ratio-estimates-full-inverse.pdf Graphic file (type pdf
 )
 <use plots/hiv-example/ratio-estimates-full-inverse.pdf>
 Package pdftex.def Info: plots/hiv-example/ratio-estimates-full-inverse.pdf  us
-ed on input line 398.
+ed on input line 361.
 (pdftex.def)             Requested size: 597.26622pt x 426.61873pt.
 [7 <./plots/hiv-example/ratio-estimates-full-inverse.pdf>]
-<plots/hiv-example/contributing-wf.pdf, id=125, 597.23125pt x 426.59375pt>
+<plots/hiv-example/contributing-wf.pdf, id=104, 597.23125pt x 426.59375pt>
 File: plots/hiv-example/contributing-wf.pdf Graphic file (type pdf)
 <use plots/hiv-example/contributing-wf.pdf>
 Package pdftex.def Info: plots/hiv-example/contributing-wf.pdf  used on input l
-ine 411.
+ine 374.
 (pdftex.def)             Requested size: 597.26622pt x 426.61873pt.
 [8 <./plots/hiv-example/contributing-wf.pdf>] (./tex-input/wsre-telescoping-mat
 hs/0010-telescoping-quantiles.tex) (./tex-input/wsre-telescoping-maths/0020-tel
@@ -1026,92 +1028,90 @@ escoping-definition.tex) [9
 
 
 ] (./tex-input/wsre-telescoping-maths/0030-tele-weighted-avg-def.tex)
-<plots/hiv-example/tele-vs-avg.pdf, id=156, 426.59375pt x 284.06125pt>
+<plots/hiv-example/tele-vs-avg.pdf, id=134, 426.59375pt x 284.06125pt>
 File: plots/hiv-example/tele-vs-avg.pdf Graphic file (type pdf)
 <use plots/hiv-example/tele-vs-avg.pdf>
 Package pdftex.def Info: plots/hiv-example/tele-vs-avg.pdf  used on input line 
-564.
+527.
 (pdftex.def)             Requested size: 399.07793pt x 265.73894pt.
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 5
-68.
+31.
 (/Users/amanderson/Library/TinyTeX/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-<plots/hiv-example/n_tele_terms_stage_one.pdf, id=159, 426.59375pt x 284.06125p
+<plots/hiv-example/n_tele_terms_stage_one.pdf, id=137, 426.59375pt x 284.06125p
 t>
 File: plots/hiv-example/n_tele_terms_stage_one.pdf Graphic file (type pdf)
 <use plots/hiv-example/n_tele_terms_stage_one.pdf>
 Package pdftex.def Info: plots/hiv-example/n_tele_terms_stage_one.pdf  used on 
-input line 582.
+input line 545.
 (pdftex.def)             Requested size: 399.07793pt x 265.73894pt.
-<plots/hiv-example/n-tele-terms-stage-two.pdf, id=160, 426.59375pt x 284.06125p
+<plots/hiv-example/n-tele-terms-stage-two.pdf, id=138, 426.59375pt x 284.06125p
 t>
 File: plots/hiv-example/n-tele-terms-stage-two.pdf Graphic file (type pdf)
 <use plots/hiv-example/n-tele-terms-stage-two.pdf>
 Package pdftex.def Info: plots/hiv-example/n-tele-terms-stage-two.pdf  used on 
-input line 591.
+input line 554.
 (pdftex.def)             Requested size: 399.07793pt x 265.73894pt.
 
 LaTeX Warning: Reference `fig:sq_error_all' on page 10 undefined on input line 
-624.
+587.
 
 [10 <./plots/hiv-example/tele-vs-avg.pdf>] [11 <./plots/hiv-example/n_tele_term
 s_stage_one.pdf> <./plots/hiv-example/n-tele-terms-stage-two.pdf>]
 
 LaTeX Warning: Reference `fig:sq_error_wsre_stage_two' on page 12 undefined on 
-input line 659.
+input line 622.
 
-<plots/hiv-example/sdens-kde-analytic-compare.pdf, id=194, 426.59375pt x 284.06
+
+LaTeX Warning: Reference `fig:p12_all_melding_dists' on page 12 undefined on in
+put line 625.
+
+<plots/hiv-example/sdens-kde-analytic-compare.pdf, id=172, 426.59375pt x 284.06
 125pt>
 File: plots/hiv-example/sdens-kde-analytic-compare.pdf Graphic file (type pdf)
 <use plots/hiv-example/sdens-kde-analytic-compare.pdf>
 Package pdftex.def Info: plots/hiv-example/sdens-kde-analytic-compare.pdf  used
- on input line 681.
+ on input line 644.
 (pdftex.def)             Requested size: 399.07793pt x 265.73894pt.
-[12 <./plots/hiv-example/sdens-kde-analytic-compare.pdf>] [13]pdfTeX warning (e
-xt4): destination with the same identifier (name{section.1}) has been already u
-sed, duplicate ignored
-<to be read again> 
-                   \relax 
-l.718 \section{Appendix}\label{appendix}}
-                                          [14] (./presanis-conflict.aux)
+[12 <./plots/hiv-example/sdens-kde-analytic-compare.pdf>] [13] [14] (./presanis
+-conflict.aux)
 
 LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 27524 strings out of 481441
- 538723 string characters out of 5919469
- 850674 words of memory out of 5000000
- 43574 multiletter control sequences out of 15000+600000
- 590411 words of font info for 116 fonts, out of 8000000 for 9000
+ 27282 strings out of 481441
+ 530358 string characters out of 5919468
+ 853097 words of memory out of 5000000
+ 43361 multiletter control sequences out of 15000+600000
+ 589553 words of font info for 110 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 85i,18n,96p,694b,849s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 80i,18n,85p,693b,849s stack positions out of 5000i,500n,10000p,200000b,80000s
  </Users/amanderson/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ect
 t1000.600pk>{/Users/amanderson/Library/TinyTeX/texmf-dist/fonts/enc/dvips/tex-g
 yre/q-ts1.enc}{/Users/amanderson/Library/TinyTeX/texmf-dist/fonts/enc/dvips/tex
 -gyre/q-ec.enc}</Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public
 /amsfonts/cm/cmex10.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmmi10.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmmi12.pfb></Users/amanderson/Library/TinyTeX/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></Users/amanderson/Library/Ti
-nyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/amanderson/Li
-brary/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/ama
-nderson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></U
-sers/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.
-pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmr7.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmr8.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmsy5.pfb></Users/amanderson/Library/TinyTeX/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/amanderson/Library/TinyTeX/t
-exmf-dist/fonts/type1/public/tex-gyre/qplb.pfb></Users/amanderson/Library/TinyT
-eX/texmf-dist/fonts/type1/public/tex-gyre/qplr.pfb></Users/amanderson/Library/T
-inyTeX/texmf-dist/fonts/type1/public/tex-gyre/qplri.pfb>
-Output written on presanis-conflict.pdf (14 pages, 619891 bytes).
+fonts/type1/public/amsfonts/cm/cmmi5.pfb></Users/amanderson/Library/TinyTeX/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/amanderson/Library/Tin
+yTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/amanderson/L
+ibrary/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/aman
+derson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></Use
+rs/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pf
+b></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmsy10.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmsy5.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmsy7.pfb></Users/amanderson/Library/TinyTeX/texmf-dist/fonts/
+type1/public/amsfonts/symbols/msbm10.pfb></Users/amanderson/Library/TinyTeX/tex
+mf-dist/fonts/type1/public/tex-gyre/qplb.pfb></Users/amanderson/Library/TinyTeX
+/texmf-dist/fonts/type1/public/tex-gyre/qplr.pfb></Users/amanderson/Library/Tin
+yTeX/texmf-dist/fonts/type1/public/tex-gyre/qplri.pfb>
+Output written on presanis-conflict.pdf (14 pages, 1009685 bytes).
 PDF statistics:
- 344 PDF objects out of 1000 (max. 8388607)
- 290 compressed objects within 3 object streams
- 65 named destinations out of 1000 (max. 500000)
- 6306 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 303 PDF objects out of 1000 (max. 8388607)
+ 250 compressed objects within 3 object streams
+ 53 named destinations out of 1000 (max. 500000)
+ 6274 words of extra memory for PDF output out of 10000 (max. 10000000)
 
