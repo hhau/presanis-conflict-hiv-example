@@ -16,8 +16,8 @@ stage_one_samples <- readRDS("rds/hiv-example/stage-one-samples.rds")
 stage_one_phi_samples <- as.vector(stage_one_samples[, , "p[12]"])
 
 # mcmc setup
-n_mcmc <- 1e3
-n_chain <- 5
+n_mcmc <- 2e3
+n_chain <- 24
 
 # stage two log posterior
 # stage two prior marginal cancels? whatever I choose for it
@@ -35,7 +35,7 @@ flog.info("Starting MCMC loop")
 log_filename <- paste0("logs/" , Sys.Date(), "-stage-two-run.log") 
 flog.appender(appender.file(log_filename), name = "stage-two-logger")
 
-mcmc_res <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_index) {
+mcmc_res <- mclapply(1 : n_chain, mc.cores = 24, function(chain_index) {
   # setup containers and initial values
   stage_one_indices <- array(
     data = NA,
@@ -89,7 +89,7 @@ mcmc_res <- mclapply(1 : n_chain, mc.cores = n_chain, function(chain_index) {
     }
 
     # append to log file.
-    if (mcmc_index %% 50 == 0) {
+    if (mcmc_index %% 500 == 0) {
       flog.info(
         sprintf("Chain: %d, Iteration: %d", chain_index, mcmc_index),
         name = "stage-two-logger"

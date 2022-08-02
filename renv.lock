@@ -513,10 +513,8 @@
     },
     "renv": {
       "Package": "renv",
-      "Version": "0.12.0",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "7340c71f46a0fd16506cfa804e224e44"
+      "Version": "0.14.0",
+      "Source": "Repository"
     },
     "reshape2": {
       "Package": "reshape2",
@@ -534,10 +532,8 @@
     },
     "rmarkdown": {
       "Package": "rmarkdown",
-      "Version": "2.4",
-      "Source": "Repository",
-      "Repository": "CRAN",
-      "Hash": "ec8febc2bd653b754d5b03c9d4b996bb"
+      "Version": "2.10",
+      "Source": "Repository"
     },
     "rprojroot": {
       "Package": "rprojroot",

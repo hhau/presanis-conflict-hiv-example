@@ -52,7 +52,7 @@ p1 <- ggplot(plot_tbl, aes(x = x, y = y, col = grp)) +
   xlab("Reference quantiles") +
   ylab("Melded model quantiles") +
   scale_colour_manual(
-    name = "Method",
+    name = "Method:",
     values = c(
       "B_WSRE" = blues[2],
       "A_No-WSRE" = highlight_col
@@ -69,15 +69,17 @@ p1 <- ggplot(plot_tbl, aes(x = x, y = y, col = grp)) +
     limits = c(0.0, 0.4)
   ) +
   coord_fixed() +
-  guides(
-    pch = guide_legend(reverse = TRUE), 
+  guides( 
     col = guide_legend(reverse = TRUE)
-  ) 
+  ) +
+  theme(legend.position = "bottom")
+
+p1
 
 ggsave(
   filename = "plots/hiv-example/posterior-qq-plot.pdf",
   plot = p1,
-  width = 12.5 * 0.72,
+  width = 12.5 * 0.72 - 2,
   height = 10.5 * 0.72,
   units = 'cm'
 )

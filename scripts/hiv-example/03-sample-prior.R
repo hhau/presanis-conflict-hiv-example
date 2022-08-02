@@ -12,9 +12,10 @@ model_fit_prior <- sampling(
   prefit,
   data = stan_data_prior,
   algorithm = "Fixed_param",
-  iter = 90001,
+  iter = 2e6 + 1,
   warmup = 1,
-  chain = 5
+  chain = 5,
+  refresh = 0
 )
 
 prior_samples <- extract(
@@ -30,7 +31,7 @@ index_vec <- apply(prior_samples, 1, function(x_mat) {
 prior_samples <- prior_samples[index_vec, , , drop = FALSE]
 
 n_prior_samples <- 3000
-n_reference_prior_samples <- 1e5
+n_reference_prior_samples <- 5e6
 
 reference_prior_samples <- prior_samples[
   sample(x = 1 : sum(index_vec), n_reference_prior_samples / 5, replace = T),
